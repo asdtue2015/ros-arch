@@ -1,0 +1,25 @@
+// generated from rosidl_typesupport_introspection_c/resource/msg__introspection_type_support.h.template
+
+#ifndef EXAMPLE_INTERFACES__SRV__ADD_TWO_INTS__REQUEST__INTROSPECTION__TYPE_SUPPORT_H_
+#define EXAMPLE_INTERFACES__SRV__ADD_TWO_INTS__REQUEST__INTROSPECTION__TYPE_SUPPORT_H_
+
+#include <rosidl_generator_c/message_type_support.h>
+
+#include "example_interfaces/msg/rosidl_generator_c__visibility_control.h"
+
+static rosidl_message_type_support_t example_interfaces__srv__rosidl_typesupport_introspection_c__AddTwoInts_Request_message_type_support_handle;
+
+#if __cplusplus
+extern "C"
+{
+#endif
+
+ROSIDL_GENERATOR_C_PUBLIC_example_interfaces
+const rosidl_message_type_support_t *
+rosidl_get_message_type_support__example_interfaces__msg__AddTwoInts_Request();
+
+#if __cplusplus
+}
+#endif
+
+#endif  // EXAMPLE_INTERFACES__SRV__ADD_TWO_INTS__REQUEST__INTROSPECTION__TYPE_SUPPORT_H_
