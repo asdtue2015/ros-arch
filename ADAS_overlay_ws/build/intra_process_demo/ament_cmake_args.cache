@@ -1,0 +1,1 @@
+{"ament_cmake_args": [], "build_tests": false, "cmake_args": ["-DCMAKE_BUILD_TYPE=Debug"], "symlink_install": false}
