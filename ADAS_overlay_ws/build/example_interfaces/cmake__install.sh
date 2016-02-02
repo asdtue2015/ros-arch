@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-export CMAKE_PREFIX_PATH="$AMENT_PREFIX_PATH:$CMAKE_PREFIX_PATH"
