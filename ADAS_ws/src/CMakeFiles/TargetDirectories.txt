@@ -1,9 +1,0 @@
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/ADAS_Pipeline_Manager.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/ADAS_Pipeline_Manager__rmw_opensplice_cpp.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/camera_node.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/camera_node__rmw_opensplice_cpp.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/lanedetect_node.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/lanedetect_node__rmw_opensplice_cpp.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/streamer_node.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/streamer_node__rmw_opensplice_cpp.dir
-/home/rameez/git_local/ADAS_ws/src/CMakeFiles/uninstall.dir
