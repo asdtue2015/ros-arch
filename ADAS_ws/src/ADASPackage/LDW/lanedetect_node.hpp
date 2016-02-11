@@ -12,18 +12,26 @@
 #include "../Aux/common.hpp"
 
 // Node that receives an image, adds some text as a watermark, and publishes it again.
-class WatermarkNode : public rclcpp::Node
+class LaneDetectNode : public rclcpp::Node
 {
 public:
-  WatermarkNode(
+	LaneDetectNode(
     const std::string & input, const std::string & output, const std::string & text,
-    const std::string & node_name = "watermark_node")
+    const std::string & node_name = "lanedetect_node")
   : Node(node_name, true)
+
   {
-    auto qos = rmw_qos_profile_sensor_data;
+
+	auto qos = rmw_qos_profile_sensor_data;
+
+
+
     // Create a publisher on the input topic.
     pub_ = this->create_publisher<sensor_msgs::msg::Image>(output, qos);
     std::weak_ptr<std::remove_pointer<decltype(pub_.get())>::type> captured_pub = pub_;
+
+
+
     // Create a subscription on the output topic.
     sub_ = this->create_subscription<sensor_msgs::msg::Image>(
       input, [captured_pub, text](sensor_msgs::msg::Image::UniquePtr msg) {

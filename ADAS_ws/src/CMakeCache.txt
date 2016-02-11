@@ -37,33 +37,18 @@ AMENT_ENABLE_TESTING:BOOL=OFF
 //The path where test results are generated
 AMENT_TEST_RESULTS_DIR:STRING=/home/rameez/git_local/ADAS_ws/src/test_results
 
-//The threading library used by boost-thread
-BOOST_THREAD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpthread.so
-
-//The directory containing a CMake configuration file for Booost.
-Booost_DIR:PATH=Booost_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for Boost.
 Boost_DIR:PATH=Boost_DIR-NOTFOUND
 
 //Path to a file.
 Boost_INCLUDE_DIR:PATH=/usr/include
 
-//Boost library directory
-Boost_LIBRARY_DIR:PATH=/usr/lib/x86_64-linux-gnu
-
-//Boost thread library (debug)
-Boost_THREAD_LIBRARY_DEBUG:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_thread.so
-
-//Boost thread library (release)
-Boost_THREAD_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_thread.so
-
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
 // CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=Debug
+CMAKE_BUILD_TYPE:STRING=
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -146,7 +131,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=OFF
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/home/rameez/git_local/ADAS_ws/install
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld
@@ -345,6 +330,9 @@ GSTREAMER_FFT_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstfft-1.0.so
 GSTREAMER_GL_LIBRARIES:FILEPATH=GSTREAMER_GL_LIBRARIES-NOTFOUND
 
 //Path to a library.
+GSTREAMER_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so
+
+//Path to a library.
 GSTREAMER_MPEGTS_LIBRARIES:FILEPATH=GSTREAMER_MPEGTS_LIBRARIES-NOTFOUND
 
 //Path to a library.
@@ -355,9 +343,6 @@ GSTREAMER_TAG_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgsttag-1.0.so
 
 //Path to a library.
 GSTREAMER_VIDEO_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstvideo-1.0.so
-
-//The directory containing a CMake configuration file for GStreamer.
-GStreamer_DIR:PATH=GStreamer_DIR-NOTFOUND
 
 //Path to a program.
 OPENSPLICE_IDLPP:FILEPATH=/usr/bin/idlpp
@@ -394,11 +379,8 @@ ProcessorCount_cmd_getconf:FILEPATH=/usr/bin/getconf
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/sbin/sysctl
 
-//Select ROS middleware implementation to link against
-RMW_IMPLEMENTATION:STRING=rmw_opensplice_cpp
-
 //Path to a library.
-_lib:FILEPATH=/home/rameez/ros2_ws/install/lib/librclcpp.so
+_lib:FILEPATH=/home/rameez/ros2_ws/install/lib/libsensor_msgs__rosidl_typesupport_opensplice_cpp.so
 
 //Value Computed by CMake
 adas_pipeline_BINARY_DIR:STATIC=/home/rameez/git_local/ADAS_ws/src
@@ -447,9 +429,6 @@ builtin_interfaces_DIR:PATH=/home/rameez/ros2_ws/install/share/builtin_interface
 
 //The directory containing a CMake configuration file for geometry_msgs.
 geometry_msgs_DIR:PATH=/home/rameez/ros2_ws/install/share/geometry_msgs/cmake
-
-//The directory containing a CMake configuration file for gstreamer-0.10.
-gstreamer-0.10_DIR:PATH=gstreamer-0.10_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for opensplice.
 opensplice_DIR:PATH=/usr/share/opensplice/cmake
@@ -508,12 +487,6 @@ tmplib:FILEPATH=/usr/lib/libdcpssacpp.so
 Boost_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_INCLUDE_DIR
 Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_LIBRARY_DIR
-Boost_LIBRARY_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_THREAD_LIBRARY_DEBUG
-Boost_THREAD_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_THREAD_LIBRARY_RELEASE
-Boost_THREAD_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_BUILD_TOOL
@@ -716,7 +689,7 @@ CUDA_run_nvcc:INTERNAL=/usr/share/cmake-2.8/Modules/FindCUDA/run_nvcc.cmake
 //Details about finding CUDA
 FIND_PACKAGE_MESSAGE_DETAILS_CUDA:INTERNAL=[/usr][/usr/bin/nvcc][/usr/include][/usr/lib/x86_64-linux-gnu/libcudart.so][v5.5(5.5)]
 //Details about finding GStreamer
-FIND_PACKAGE_MESSAGE_DETAILS_GStreamer:INTERNAL=[GSTREAMER_INCLUDE_DIRS;GSTREAMER_LIBRARIES;GSTREAMER_VERSION;GSTREAMER_BASE_INCLUDE_DIRS;GSTREAMER_BASE_LIBRARIES][v1.2.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_GStreamer:INTERNAL=[GSTREAMER_INCLUDE_DIRS;GSTREAMER_LIBRARIES;GSTREAMER_VERSION;GSTREAMER_BASE_INCLUDE_DIRS;GSTREAMER_BASE_LIBRARIES][v()]
 //Details about finding OpenSplice
 FIND_PACKAGE_MESSAGE_DETAILS_OpenSplice:INTERNAL=[/usr/share/opensplice/cmake/../../../include/opensplice;/usr/share/opensplice/cmake/../../../include/opensplice/sys;/usr/share/opensplice/cmake/../../../include/opensplice/dcps/C++/SACPP][/usr/lib/libcmxml.so;/usr/lib/libcommonserv.so;/usr/lib/libdcpsgapi.so;/usr/lib/libdcpssac.so;/usr/lib/libddsconfparser.so;/usr/lib/libddsconf.so;/usr/lib/libddsdatabase.so;/usr/lib/libddsi2.so;/usr/lib/libddskernel.so;/usr/lib/libddsosnet.so;/usr/lib/libddsos.so;/usr/lib/libddsserialization.so;/usr/lib/libddsuser.so;/usr/lib/libddsutil.so;/usr/lib/libdurability.so;/usr/lib/libspliced.so;/usr/lib/libdcpssacpp.so][/usr/bin/idlpp][v()]
 //Details about finding PkgConfig
@@ -729,106 +702,20 @@ GSTREAMER_APP_LIBRARIES-ADVANCED:INTERNAL=1
 GSTREAMER_AUDIO_LIBRARIES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GSTREAMER_BASE_LIBRARIES
 GSTREAMER_BASE_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_CFLAGS:INTERNAL=-pthread;-I/opt/gstreamer-sdk/include/glib-2.0;-I/opt/gstreamer-sdk/lib/glib-2.0/include;-I/usr/include/gstreamer-1.0
-GSTREAMER_CFLAGS_I:INTERNAL=
-GSTREAMER_CFLAGS_OTHER:INTERNAL=-pthread
 //ADVANCED property for variable: GSTREAMER_FFT_LIBRARIES
 GSTREAMER_FFT_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_FOUND:INTERNAL=1
 //ADVANCED property for variable: GSTREAMER_GL_LIBRARIES
 GSTREAMER_GL_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_INCLUDEDIR:INTERNAL=/usr/include/gstreamer-1.0
-//ADVANCED property for variable: GSTREAMER_INCLUDE_DIRS
-GSTREAMER_INCLUDE_DIRS-ADVANCED:INTERNAL=1
-GSTREAMER_INCLUDE_DIRS:INTERNAL=/opt/gstreamer-sdk/include/glib-2.0;/opt/gstreamer-sdk/lib/glib-2.0/include;/usr/include/gstreamer-1.0
-GSTREAMER_LDFLAGS:INTERNAL=-L/opt/gstreamer-sdk/lib;-lgstapp-1.0;-lgstbase-1.0;-lgstreamer-1.0;-lgobject-2.0;-lglib-2.0
-GSTREAMER_LDFLAGS_OTHER:INTERNAL=
-GSTREAMER_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
 //ADVANCED property for variable: GSTREAMER_LIBRARIES
 GSTREAMER_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_LIBRARIES:INTERNAL=gstapp-1.0;gstbase-1.0;gstreamer-1.0;gobject-2.0;glib-2.0
-GSTREAMER_LIBRARY_DIRS:INTERNAL=/opt/gstreamer-sdk/lib
-GSTREAMER_LIBS:INTERNAL=
-GSTREAMER_LIBS_L:INTERNAL=
-GSTREAMER_LIBS_OTHER:INTERNAL=
-GSTREAMER_LIBS_PATHS:INTERNAL=
 //ADVANCED property for variable: GSTREAMER_MPEGTS_LIBRARIES
 GSTREAMER_MPEGTS_LIBRARIES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GSTREAMER_PBUTILS_LIBRARIES
 GSTREAMER_PBUTILS_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_PREFIX:INTERNAL=/usr
-GSTREAMER_STATIC_CFLAGS:INTERNAL=-pthread;-I/opt/gstreamer-sdk/include/glib-2.0;-I/opt/gstreamer-sdk/lib/glib-2.0/include;-I/usr/include/gstreamer-1.0
-GSTREAMER_STATIC_CFLAGS_I:INTERNAL=
-GSTREAMER_STATIC_CFLAGS_OTHER:INTERNAL=-pthread
-GSTREAMER_STATIC_INCLUDE_DIRS:INTERNAL=/opt/gstreamer-sdk/include/glib-2.0;/opt/gstreamer-sdk/lib/glib-2.0/include;/usr/include/gstreamer-1.0
-GSTREAMER_STATIC_LDFLAGS:INTERNAL=-pthread;-L/opt/gstreamer-sdk/lib;-lgstapp-1.0;-lgstbase-1.0;-lgstreamer-1.0;-lgmodule-2.0;-ldl;-lgobject-2.0;-lffi;-lglib-2.0
-GSTREAMER_STATIC_LDFLAGS_OTHER:INTERNAL=
-GSTREAMER_STATIC_LIBDIR:INTERNAL=
-GSTREAMER_STATIC_LIBRARIES:INTERNAL=gstapp-1.0;gstbase-1.0;gstreamer-1.0;gmodule-2.0;dl;gobject-2.0;ffi;glib-2.0
-GSTREAMER_STATIC_LIBRARY_DIRS:INTERNAL=/opt/gstreamer-sdk/lib
-GSTREAMER_STATIC_LIBS:INTERNAL=
-GSTREAMER_STATIC_LIBS_L:INTERNAL=
-GSTREAMER_STATIC_LIBS_OTHER:INTERNAL=
-GSTREAMER_STATIC_LIBS_PATHS:INTERNAL=
 //ADVANCED property for variable: GSTREAMER_TAG_LIBRARIES
 GSTREAMER_TAG_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_VERSION:INTERNAL=1.2.4
 //ADVANCED property for variable: GSTREAMER_VIDEO_LIBRARIES
 GSTREAMER_VIDEO_LIBRARIES-ADVANCED:INTERNAL=1
-GSTREAMER_gstreamer-0.10_INCLUDEDIR:INTERNAL=
-GSTREAMER_gstreamer-0.10_LIBDIR:INTERNAL=
-GSTREAMER_gstreamer-0.10_PREFIX:INTERNAL=
-GSTREAMER_gstreamer-0.10_VERSION:INTERNAL=
-GSTREAMER_gstreamer-app-1.0_INCLUDEDIR:INTERNAL=
-GSTREAMER_gstreamer-app-1.0_LIBDIR:INTERNAL=
-GSTREAMER_gstreamer-app-1.0_PREFIX:INTERNAL=
-GSTREAMER_gstreamer-app-1.0_VERSION:INTERNAL=
-GSTREAMER_libgstreamer-0.10.a_INCLUDEDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10.a_LIBDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10.a_PREFIX:INTERNAL=
-GSTREAMER_libgstreamer-0.10.a_VERSION:INTERNAL=
-GSTREAMER_libgstreamer-0.10.pc._INCLUDEDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10.pc._LIBDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10.pc._PREFIX:INTERNAL=
-GSTREAMER_libgstreamer-0.10.pc._VERSION:INTERNAL=
-GSTREAMER_libgstreamer-0.10_INCLUDEDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10_LIBDIR:INTERNAL=
-GSTREAMER_libgstreamer-0.10_PREFIX:INTERNAL=
-GSTREAMER_libgstreamer-0.10_VERSION:INTERNAL=
-GSTREAMER_libgstreamer1.0-dev_INCLUDEDIR:INTERNAL=
-GSTREAMER_libgstreamer1.0-dev_LIBDIR:INTERNAL=
-GSTREAMER_libgstreamer1.0-dev_PREFIX:INTERNAL=
-GSTREAMER_libgstreamer1.0-dev_VERSION:INTERNAL=
-GStreamer_CFLAGS:INTERNAL=
-GStreamer_CFLAGS_I:INTERNAL=
-GStreamer_CFLAGS_OTHER:INTERNAL=
-GStreamer_FOUND:INTERNAL=1
-GStreamer_INCLUDEDIR:INTERNAL=
-GStreamer_INCLUDE_DIRS:INTERNAL=
-GStreamer_LDFLAGS:INTERNAL=
-GStreamer_LDFLAGS_OTHER:INTERNAL=
-GStreamer_LIBDIR:INTERNAL=
-GStreamer_LIBRARIES:INTERNAL=
-GStreamer_LIBRARY_DIRS:INTERNAL=
-GStreamer_LIBS:INTERNAL=
-GStreamer_LIBS_L:INTERNAL=
-GStreamer_LIBS_OTHER:INTERNAL=
-GStreamer_LIBS_PATHS:INTERNAL=
-GStreamer_PREFIX:INTERNAL=
-GStreamer_STATIC_CFLAGS:INTERNAL=
-GStreamer_STATIC_CFLAGS_I:INTERNAL=
-GStreamer_STATIC_CFLAGS_OTHER:INTERNAL=
-GStreamer_STATIC_INCLUDE_DIRS:INTERNAL=
-GStreamer_STATIC_LDFLAGS:INTERNAL=
-GStreamer_STATIC_LDFLAGS_OTHER:INTERNAL=
-GStreamer_STATIC_LIBDIR:INTERNAL=
-GStreamer_STATIC_LIBRARIES:INTERNAL=
-GStreamer_STATIC_LIBRARY_DIRS:INTERNAL=
-GStreamer_STATIC_LIBS:INTERNAL=
-GStreamer_STATIC_LIBS_L:INTERNAL=
-GStreamer_STATIC_LIBS_OTHER:INTERNAL=
-GStreamer_STATIC_LIBS_PATHS:INTERNAL=
-GStreamer_VERSION:INTERNAL=
 //ADVANCED property for variable: OpenCV_3RDPARTY_LIB_DIR_DBG
 OpenCV_3RDPARTY_LIB_DIR_DBG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenCV_3RDPARTY_LIB_DIR_OPT
@@ -937,10 +824,6 @@ PC_GSTREAMER_BASE_STATIC_LIBS_L:INTERNAL=
 PC_GSTREAMER_BASE_STATIC_LIBS_OTHER:INTERNAL=
 PC_GSTREAMER_BASE_STATIC_LIBS_PATHS:INTERNAL=
 PC_GSTREAMER_BASE_VERSION:INTERNAL=1.2.4
-PC_GSTREAMER_BASE_gstreamer-base-0.10 _INCLUDEDIR:INTERNAL=
-PC_GSTREAMER_BASE_gstreamer-base-0.10 _LIBDIR:INTERNAL=
-PC_GSTREAMER_BASE_gstreamer-base-0.10 _PREFIX:INTERNAL=
-PC_GSTREAMER_BASE_gstreamer-base-0.10 _VERSION:INTERNAL=
 PC_GSTREAMER_BASE_gstreamer-base-1.0 _INCLUDEDIR:INTERNAL=
 PC_GSTREAMER_BASE_gstreamer-base-1.0 _LIBDIR:INTERNAL=
 PC_GSTREAMER_BASE_gstreamer-base-1.0 _PREFIX:INTERNAL=
@@ -1159,40 +1042,12 @@ PC_GSTREAMER_VIDEO_gstreamer-video-1.0 _INCLUDEDIR:INTERNAL=
 PC_GSTREAMER_VIDEO_gstreamer-video-1.0 _LIBDIR:INTERNAL=
 PC_GSTREAMER_VIDEO_gstreamer-video-1.0 _PREFIX:INTERNAL=
 PC_GSTREAMER_VIDEO_gstreamer-video-1.0 _VERSION:INTERNAL=
-PC_GSTREAMER_gstreamer-.0 _INCLUDEDIR:INTERNAL=
-PC_GSTREAMER_gstreamer-.0 _LIBDIR:INTERNAL=
-PC_GSTREAMER_gstreamer-.0 _PREFIX:INTERNAL=
-PC_GSTREAMER_gstreamer-.0 _VERSION:INTERNAL=
 PC_GSTREAMER_gstreamer-1.0 _INCLUDEDIR:INTERNAL=
 PC_GSTREAMER_gstreamer-1.0 _LIBDIR:INTERNAL=
 PC_GSTREAMER_gstreamer-1.0 _PREFIX:INTERNAL=
 PC_GSTREAMER_gstreamer-1.0 _VERSION:INTERNAL=
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
-PKG_GSTREAMER_CFLAGS:INTERNAL=
-PKG_GSTREAMER_CFLAGS_I:INTERNAL=
-PKG_GSTREAMER_CFLAGS_OTHER:INTERNAL=
-PKG_GSTREAMER_FOUND:INTERNAL=
-PKG_GSTREAMER_INCLUDEDIR:INTERNAL=
-PKG_GSTREAMER_LIBDIR:INTERNAL=
-PKG_GSTREAMER_LIBS:INTERNAL=
-PKG_GSTREAMER_LIBS_L:INTERNAL=
-PKG_GSTREAMER_LIBS_OTHER:INTERNAL=
-PKG_GSTREAMER_LIBS_PATHS:INTERNAL=
-PKG_GSTREAMER_PREFIX:INTERNAL=
-PKG_GSTREAMER_STATIC_CFLAGS:INTERNAL=
-PKG_GSTREAMER_STATIC_CFLAGS_I:INTERNAL=
-PKG_GSTREAMER_STATIC_CFLAGS_OTHER:INTERNAL=
-PKG_GSTREAMER_STATIC_LIBDIR:INTERNAL=
-PKG_GSTREAMER_STATIC_LIBS:INTERNAL=
-PKG_GSTREAMER_STATIC_LIBS_L:INTERNAL=
-PKG_GSTREAMER_STATIC_LIBS_OTHER:INTERNAL=
-PKG_GSTREAMER_STATIC_LIBS_PATHS:INTERNAL=
-PKG_GSTREAMER_VERSION:INTERNAL=
-PKG_GSTREAMER_gstreamer-0.10_INCLUDEDIR:INTERNAL=
-PKG_GSTREAMER_gstreamer-0.10_LIBDIR:INTERNAL=
-PKG_GSTREAMER_gstreamer-0.10_PREFIX:INTERNAL=
-PKG_GSTREAMER_gstreamer-0.10_VERSION:INTERNAL=
 //ADVANCED property for variable: PYTHON_EXECUTABLE
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_getconf
@@ -1200,15 +1055,11 @@ ProcessorCount_cmd_getconf-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_sysctl
 ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
 //Components requested for this build tree.
-_Boost_COMPONENTS_SEARCHED:INTERNAL=thread
+_Boost_COMPONENTS_SEARCHED:INTERNAL=
 //Last used Boost_INCLUDE_DIR value.
 _Boost_INCLUDE_DIR_LAST:INTERNAL=/usr/include
-//Last used Boost_LIBRARY_DIR value.
-_Boost_LIBRARY_DIR_LAST:INTERNAL=/usr/lib/x86_64-linux-gnu
 //Last used Boost_USE_MULTITHREADED value.
 _Boost_USE_MULTITHREADED_LAST:INTERNAL=TRUE
-__pkg_config_checked_GSTREAMER:INTERNAL=1
-__pkg_config_checked_GStreamer:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_APP:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_AUDIO:INTERNAL=1
@@ -1219,5 +1070,4 @@ __pkg_config_checked_PC_GSTREAMER_MPEGTS:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_PBUTILS:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_TAG:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_VIDEO:INTERNAL=1
-__pkg_config_checked_PKG_GSTREAMER:INTERNAL=1
 

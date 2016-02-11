@@ -13,12 +13,12 @@ int main(int argc, char * argv[])
   // Connect the nodes as a pipeline: camera_node -> lanedetect_node-> streamer_node
   auto camera_node = std::make_shared<CameraNode>("image");
   auto watermark_node =
-    std::make_shared<WatermarkNode>("image", "watermarked_image", "Heel world!");
-  auto image_view_node = std::make_shared<ImageViewNode>("watermarked_image");
+    std::make_shared<LaneDetectNode>("image", "watermarked_image", "Heellllmkmol world!");
+  auto streamer_node = std::make_shared<Streamer>("watermarked_image");
 
   executor.add_node(camera_node);
   executor.add_node(watermark_node);
-  executor.add_node(image_view_node);
+  executor.add_node(streamer_node);
 
   executor.spin();
   return 0;

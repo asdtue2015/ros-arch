@@ -15,61 +15,69 @@ find_package(rmw_implementation_cmake REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED)
 find_package(GStreamer REQUIRED)
-include_directories(include ${Boost_INCLUDE_DIRS} ${GStreamer_INCLUDE_DIRS})
+
+include_directories(include ${Boost_INCLUDE_DIRS} ${GSTREAMER_BASE_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS} )
+link_directories(${GSTREAMER_LIBRARIES})
+
+#target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES})
 
 
 
-macro(targets)
-  if(NOT "${target_suffix} " STREQUAL " ")
-    get_rclcpp_information("${rmw_implementation}" "rclcpp${target_suffix}")
-  endif()
+
 
  
-  # A single program with one of each of the image pipeline demo nodes.
-  add_executable(ADAS_Pipeline_Manager${target_suffix}
-    ADASPackage/ADAS_Pipeline_Manager.cpp)
-  ament_target_dependencies(ADAS_Pipeline_Manager${target_suffix}
-    "rclcpp${target_suffix}"
-    "sensor_msgs"
-    "OpenCV")
-
+ # A single program with one of each of the image pipeline demo nodes.
+ 
+ add_executable(ADAS_Pipeline_Manager
+ ADASPackage/ADAS_Pipeline_Manager.cpp)
+ target_link_libraries(ADAS_Pipeline_Manager ${GSTREAMER_LIBRARIES})
+ ament_target_dependencies(ADAS_Pipeline_Manager
+   				"rclcpp"
+   				"sensor_msgs"
+    				"OpenCV")
+     
   
-  # A stand alone node which produces images from a camera using OpenCV.
-  add_executable(camera_node${target_suffix}
-    ADASPackage/InputStream/camera_node.cpp)
-  ament_target_dependencies(camera_node${target_suffix}
-    "rclcpp${target_suffix}"
-    "sensor_msgs"
-    "OpenCV")
+ #  A stand alone node which produces images from a camera using OpenCV.
+  
+   add_executable(camera_node
+   ADASPackage/InputStream/camera_node.cpp)
+
+   ament_target_dependencies(camera_node
+    				"rclcpp"
+    				"sensor_msgs"
+    				"OpenCV")
 
   # A stand alone node which performs Lane Detection on the road images
-  add_executable(lanedetect_node${target_suffix}
-    ADASPackage/LDW/lanedetect_node.cpp)
-  ament_target_dependencies(lanedetect_node${target_suffix}
-    "rclcpp${target_suffix}"
-    "sensor_msgs"
-    "OpenCV"
-     "GStreamer")
+  
+  add_executable(lanedetect_node
+   		ADASPackage/LDW/lanedetect_node.cpp)
+  
+  ament_target_dependencies(lanedetect_node
+    				"rclcpp"
+    				"sensor_msgs"
+    				"OpenCV")
 
   # A stand alone node which streams out the processed frames on the network
-  add_executable(streamer_node${target_suffix}
+  add_executable(streamer_node
     ADASPackage/VideoServer/streamer_node.cpp)
-  ament_target_dependencies(streamer_node${target_suffix}
-    "rclcpp${target_suffix}"
-    "sensor_msgs"
-    "OpenCV")
+  target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES})
+  ament_target_dependencies(streamer_node
+   				 "rclcpp"
+   				 "sensor_msgs"
+   				 "OpenCV")
+     
+   
 
   install(TARGETS   
-    ADAS_Pipeline_Manager${target_suffix}
-    camera_node${target_suffix}
-    lanedetect_node${target_suffix}
-    streamer_node${target_suffix}
+    #ADAS_Pipeline_Manager
+    camera_node
+    lanedetect_node
+    streamer_node
     DESTINATION bin)
-endmacro()
 
-call_for_each_rmw_implementation(targets GENERATE_DEFAULT)
+
+#call_for_each_rmw_implementation(targets GENERATE_DEFAULT)
 
 ament_package()

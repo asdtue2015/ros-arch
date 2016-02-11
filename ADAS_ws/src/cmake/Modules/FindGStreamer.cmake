@@ -1,4 +1,3 @@
-
 # - Try to find GStreamer and its plugins
 # Once done, this will define
 #
@@ -130,5 +129,3 @@ mark_as_advanced(
     GSTREAMER_VIDEO_INCLUDE_DIRS
     GSTREAMER_VIDEO_LIBRARIES
 )
-
-    

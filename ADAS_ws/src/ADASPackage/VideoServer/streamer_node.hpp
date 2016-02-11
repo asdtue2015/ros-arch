@@ -16,7 +16,7 @@
 #define IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
 
 #include <string>
-
+#include <gst/gst.h>
 #include "opencv2/highgui/highgui.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
@@ -24,44 +24,57 @@
 #include "../Aux/common.hpp"
 
 // Node which receives sensor_msgs/Image messages and renders them using OpenCV.
-class ImageViewNode : public rclcpp::Node
+class Streamer : public rclcpp::Node
 {
 public:
-  explicit ImageViewNode(
-    const std::string & input, const std::string & node_name = "image_view_node")
+  explicit Streamer(
+    const std::string & input, const std::string & node_name = "streamer_node")
   : Node(node_name, true)
   {
-    // Create a subscription on the input topic.
+	  // Create a subscription on the input topic.
     sub_ = this->create_subscription<sensor_msgs::msg::Image>(
       input, [node_name](const sensor_msgs::msg::Image::SharedPtr msg) {
-      // Create a cv::Mat from the image message (without copying).
+
+
+    // Create a cv::Mat from the image message (without copying).
       cv::Mat cv_mat(
         msg->width, msg->height,
         encoding2mat_type(msg->encoding),
         msg->data.data());
+
       // Annotate with the pid and pointer address.
       std::stringstream ss;
       ss << "pid: " << GETPID() << ", ptr: " << msg.get();
       draw_on_image(cv_mat, ss.str(), 60);
+
+
       // Show the image.
       CvMat c_mat = cv_mat;
       cvShowImage(node_name.c_str(), &c_mat);
+
+
       char key = cv::waitKey(1);    // Look for key presses.
-      if (key == 27 /* ESC */ || key == 'q') {
+
+      if (key == 27 /* ESC */ || key == 'q')
+      {
         rclcpp::shutdown();
       }
-      if (key == ' ') {    // If <space> then pause until another <space>.
+
+      if (key == ' ')
+      {    // If <space> then pause until another <space>.
         key = '\0';
-        while (key != ' ') {
+        while (key != ' ')
+        {
           key = cv::waitKey(1);
         }
+
       }
+
     }, rmw_qos_profile_sensor_data);
   }
 
 private:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
-
   cv::VideoCapture cap_;
   cv::Mat frame_;
 };
