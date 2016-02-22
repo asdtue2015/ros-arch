@@ -1,0 +1,164 @@
+// Copyright 2015 Open Source Robotics Foundation, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#ifndef IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
+#define IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
+#include <gst/gst.h>
+#include <gst/app/gstappsink.h>
+#include <gio/gio.h>
+#include <string>
+#include "opencv2/highgui/highgui.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/image.hpp"
+#include "../Aux/common.hpp"
+
+
+// Node which receives sensor_msgs/Image messages and renders them using OpenCV.
+class Streamer : public rclcpp::Node
+{
+
+private:
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
+
+
+    cv::Mat frame;
+    static GMainLoop *loop;
+    guchar*  Gst_encoding;
+    bool VidSource_initialised=false;
+    size_t sizeInBytes;
+    guint height, width;
+    GstClockTime timestamp;
+    GstBuffer *buffer;
+    GstFlowReturn ret;
+    GstElement *pipeline, *appsrc, *conv, *videosink;
+    guchar *framedata;
+    GstMapInfo map;
+
+
+   void  cb_need_data (GstElement *appsrc,
+    guint unused_size,
+    gpointer user_data)
+    {
+    static gboolean white = FALSE;
+    static GstClockTime timestamp = 0;
+    GstBuffer *buffer;
+    guint size;
+    GstFlowReturn ret;
+    size = 385 * 288 * 2;
+    buffer = gst_buffer_new_allocate (NULL, size, NULL);
+    /* this makes the image black/white */
+    gst_buffer_memset (buffer, 0, white ? 0xff : 0x0, size);
+    white = !white;
+    GST_BUFFER_PTS (buffer) = timestamp;
+    GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
+    timestamp += GST_BUFFER_DURATION (buffer);
+    g_signal_emit_by_name (appsrc, "push-buffer", buffer, &ret);
+    if (ret != GST_FLOW_OK) {
+    /* something wrong, stop pushing */
+    g_main_loop_quit (loop);
+    }
+    }
+
+public: explicit Streamer( const std::string & input, const std::string & node_name = "streamer_node")
+  	  	  	  	 : Node(node_name, true)
+{
+
+
+
+
+
+    // Create a subscription on the input topic.
+    sub_ = this->create_subscription<sensor_msgs::msg::Image>(input, [node_name, this](const sensor_msgs::msg::Image::SharedPtr msg)
+
+{
+  //Create a cv::Mat from the image message (without copying).
+   cv::Mat frame_(msg->width, msg->height,encoding2mat_type(msg->encoding), msg->data.data());
+   frame=frame_;
+
+   if (! VidSource_initialised)
+
+   {
+
+    //Get frame properties
+	   sizeInBytes = frame.step[0] * frame.rows;
+	   height = (guint)frame.rows;
+	   width  = (guint)frame.cols;
+	   framedata   = (guchar *)frame.data;
+	   Gst_encoding = (guchar*)mat_type2GSTencoding(frame.type());
+
+	 //setup pipeline
+	    pipeline  = gst_pipeline_new ("pipeline");
+	    appsrc    = gst_element_factory_make ("appsrc", "source");
+	    conv      = gst_element_factory_make ("videoconvert", "conv");
+	    videosink = gst_element_factory_make ("autovideosink", "videosink");
+
+
+	  //SETUP
+	    g_object_set (G_OBJECT (appsrc), "caps",
+	    gst_caps_new_simple ("video/x-raw", "format", G_TYPE_STRING, Gst_encoding, "width", G_TYPE_INT, width, "height", G_TYPE_INT,height, "framerate", GST_TYPE_FRACTION, 0, 1,NULL), NULL);
+
+
+      //SETUP the members assosiated with source
+        	 g_object_set (G_OBJECT (appsrc), "caps",
+        	 gst_caps_new_simple ("video/x-raw", "format", G_TYPE_STRING, Gst_encoding, "width", G_TYPE_INT, width, "height", G_TYPE_INT,height, "framerate", GST_TYPE_FRACTION, 0, 1,NULL), NULL);
+        	 gst_bin_add_many (GST_BIN (pipeline), appsrc, conv, videosink, NULL);
+        	 gst_element_link_many (appsrc, conv, videosink, NULL);
+        	 buffer = gst_buffer_new_allocate (NULL, sizeInBytes, NULL);
+        	 gst_buffer_map (buffer, &map, GST_MAP_WRITE);
+
+
+       //setup appsrc
+
+        	g_object_set (G_OBJECT (appsrc),"stream-type", 0, "format", GST_FORMAT_TIME, NULL);
+        	g_signal_connect (appsrc, "need-data", G_CALLBACK (cb_need_data), NULL);
+
+        	     /* play */
+        	         								/*			gst_element_set_state (pipeline, GST_STATE_PLAYING);
+        	         											g_main_loop_run (loop);
+        	         							Source_initialised= true;*/
+        	 VidSource_initialised = true;
+
+        }
+
+
+
+
+
+
+
+      height=20;
+
+
+      // Annotate with the pid and pointer address.
+      std::stringstream ss;
+      ss << "pid: " << GETPID() << ", ptr: " << msg.get();
+      draw_on_image(frame, ss.str(), 60);
+      cvShowImage(node_name.c_str(), &frame);
+      char key = cv::waitKey(1);    // Look for key presses.
+      if (key == 27 /* ESC */ || key == 'q') {
+        rclcpp::shutdown();
+      }
+      if (key == ' ') {    // If <space> then pause until another <space>.
+        key = '\0';
+        while (key != ' ') {
+          key = cv::waitKey(1);
+        }
+      }
+    }, rmw_qos_profile_sensor_data);
+  }
+};
+
+
+
+#endif  // IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
