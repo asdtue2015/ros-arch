@@ -1,6 +1,0 @@
-20:30:12 **** Build of configuration Default for project adas_pipeline ****
-make all 
-make: *** No rule to make target `all'.  Stop.
-
-20:30:12 Build Finished (took 65ms)
-
