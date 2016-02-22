@@ -314,6 +314,27 @@ CUDA_nppi_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libnppi.so
 //"npps" library
 CUDA_npps_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libnpps.so
 
+//Path to a file.
+GLIBCONFIG_INCLUDE_DIR:PATH=/usr/lib/x86_64-linux-gnu/glib-2.0/include
+
+//Path to a library.
+GLIB_GIO_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgio-2.0.so
+
+//Path to a library.
+GLIB_GMODULE_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgmodule-2.0.so
+
+//Path to a library.
+GLIB_GOBJECT_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgobject-2.0.so
+
+//Path to a library.
+GLIB_GTHREAD_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgthread-2.0.so
+
+//Path to a file.
+GLIB_INCLUDE_DIR:PATH=/usr/include/glib-2.0
+
+//Path to a library.
+GLIB_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libglib-2.0.so
+
 //Path to a library.
 GSTREAMER_APP_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstapp-1.0.so
 
@@ -333,7 +354,7 @@ GSTREAMER_GL_LIBRARIES:FILEPATH=GSTREAMER_GL_LIBRARIES-NOTFOUND
 GSTREAMER_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so
 
 //Path to a library.
-GSTREAMER_MPEGTS_LIBRARIES:FILEPATH=GSTREAMER_MPEGTS_LIBRARIES-NOTFOUND
+GSTREAMER_MPEGTS_LIBRARIES:FILEPATH=/usr/lib/libgstmpegts-1.0.so
 
 //Path to a library.
 GSTREAMER_PBUTILS_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstpbutils-1.0.so
@@ -356,7 +377,7 @@ OpenCV_3RDPARTY_LIB_DIR_OPT:PATH=
 OpenCV_CONFIG_PATH:FILEPATH=/usr/local/share/OpenCV
 
 //The directory containing a CMake configuration file for OpenCV.
-OpenCV_DIR:PATH=/usr/local/share/OpenCV
+OpenCV_DIR:PATH=/usr/share/OpenCV
 
 //Path where debug OpenCV libraries are located
 OpenCV_LIB_DIR_DBG:PATH=
@@ -429,6 +450,9 @@ builtin_interfaces_DIR:PATH=/home/rameez/ros2_ws/install/share/builtin_interface
 
 //The directory containing a CMake configuration file for geometry_msgs.
 geometry_msgs_DIR:PATH=/home/rameez/ros2_ws/install/share/geometry_msgs/cmake
+
+//The directory containing a CMake configuration file for glib-2.0.
+glib-2.0_DIR:PATH=glib-2.0_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for opensplice.
 opensplice_DIR:PATH=/usr/share/opensplice/cmake
@@ -688,6 +712,8 @@ CUDA_parse_cubin:INTERNAL=/usr/share/cmake-2.8/Modules/FindCUDA/parse_cubin.cmak
 CUDA_run_nvcc:INTERNAL=/usr/share/cmake-2.8/Modules/FindCUDA/run_nvcc.cmake
 //Details about finding CUDA
 FIND_PACKAGE_MESSAGE_DETAILS_CUDA:INTERNAL=[/usr][/usr/bin/nvcc][/usr/include][/usr/lib/x86_64-linux-gnu/libcudart.so][v5.5(5.5)]
+//Details about finding GLIB
+FIND_PACKAGE_MESSAGE_DETAILS_GLIB:INTERNAL=[/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include][/usr/lib/x86_64-linux-gnu/libglib-2.0.so][/usr/lib/x86_64-linux-gnu/libgio-2.0.so][/usr/lib/x86_64-linux-gnu/libgobject-2.0.so][/usr/lib/x86_64-linux-gnu/libgmodule-2.0.so][/usr/lib/x86_64-linux-gnu/libgthread-2.0.so][v2.40.2()]
 //Details about finding GStreamer
 FIND_PACKAGE_MESSAGE_DETAILS_GStreamer:INTERNAL=[GSTREAMER_INCLUDE_DIRS;GSTREAMER_LIBRARIES;GSTREAMER_VERSION;GSTREAMER_BASE_INCLUDE_DIRS;GSTREAMER_BASE_LIBRARIES][v()]
 //Details about finding OpenSplice
@@ -726,6 +752,40 @@ OpenCV_CONFIG_PATH-ADVANCED:INTERNAL=1
 OpenCV_LIB_DIR_DBG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenCV_LIB_DIR_OPT
 OpenCV_LIB_DIR_OPT-ADVANCED:INTERNAL=1
+PC_GLIB_CFLAGS:INTERNAL=-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GLIB_CFLAGS_I:INTERNAL=
+PC_GLIB_CFLAGS_OTHER:INTERNAL=
+PC_GLIB_FOUND:INTERNAL=1
+PC_GLIB_INCLUDEDIR:INTERNAL=/usr/include
+PC_GLIB_INCLUDE_DIRS:INTERNAL=/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GLIB_LDFLAGS:INTERNAL=-lglib-2.0
+PC_GLIB_LDFLAGS_OTHER:INTERNAL=
+PC_GLIB_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
+PC_GLIB_LIBRARIES:INTERNAL=glib-2.0
+PC_GLIB_LIBRARY_DIRS:INTERNAL=
+PC_GLIB_LIBS:INTERNAL=
+PC_GLIB_LIBS_L:INTERNAL=
+PC_GLIB_LIBS_OTHER:INTERNAL=
+PC_GLIB_LIBS_PATHS:INTERNAL=
+PC_GLIB_PREFIX:INTERNAL=/usr
+PC_GLIB_STATIC_CFLAGS:INTERNAL=-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GLIB_STATIC_CFLAGS_I:INTERNAL=
+PC_GLIB_STATIC_CFLAGS_OTHER:INTERNAL=
+PC_GLIB_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GLIB_STATIC_LDFLAGS:INTERNAL=-pthread;-lglib-2.0;-lpcre
+PC_GLIB_STATIC_LDFLAGS_OTHER:INTERNAL=-pthread
+PC_GLIB_STATIC_LIBDIR:INTERNAL=
+PC_GLIB_STATIC_LIBRARIES:INTERNAL=glib-2.0;pcre
+PC_GLIB_STATIC_LIBRARY_DIRS:INTERNAL=
+PC_GLIB_STATIC_LIBS:INTERNAL=
+PC_GLIB_STATIC_LIBS_L:INTERNAL=
+PC_GLIB_STATIC_LIBS_OTHER:INTERNAL=
+PC_GLIB_STATIC_LIBS_PATHS:INTERNAL=
+PC_GLIB_VERSION:INTERNAL=2.40.2
+PC_GLIB_glib-2.0_INCLUDEDIR:INTERNAL=
+PC_GLIB_glib-2.0_LIBDIR:INTERNAL=
+PC_GLIB_glib-2.0_PREFIX:INTERNAL=
+PC_GLIB_glib-2.0_VERSION:INTERNAL=
 PC_GSTREAMER_APP_CFLAGS:INTERNAL=-pthread;-I/usr/include/gstreamer-1.0;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 PC_GSTREAMER_APP_CFLAGS_I:INTERNAL=
 PC_GSTREAMER_APP_CFLAGS_OTHER:INTERNAL=-pthread
@@ -901,26 +961,36 @@ PC_GSTREAMER_LIBS:INTERNAL=
 PC_GSTREAMER_LIBS_L:INTERNAL=
 PC_GSTREAMER_LIBS_OTHER:INTERNAL=
 PC_GSTREAMER_LIBS_PATHS:INTERNAL=
-PC_GSTREAMER_MPEGTS_CFLAGS:INTERNAL=
+PC_GSTREAMER_MPEGTS_CFLAGS:INTERNAL=-pthread;-I/usr/include/gstreamer-1.0;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 PC_GSTREAMER_MPEGTS_CFLAGS_I:INTERNAL=
-PC_GSTREAMER_MPEGTS_CFLAGS_OTHER:INTERNAL=
-PC_GSTREAMER_MPEGTS_FOUND:INTERNAL=
-PC_GSTREAMER_MPEGTS_INCLUDEDIR:INTERNAL=
-PC_GSTREAMER_MPEGTS_LIBDIR:INTERNAL=
+PC_GSTREAMER_MPEGTS_CFLAGS_OTHER:INTERNAL=-pthread
+PC_GSTREAMER_MPEGTS_FOUND:INTERNAL=1
+PC_GSTREAMER_MPEGTS_INCLUDEDIR:INTERNAL=/usr/include/gstreamer-1.0
+PC_GSTREAMER_MPEGTS_INCLUDE_DIRS:INTERNAL=/usr/include/gstreamer-1.0;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GSTREAMER_MPEGTS_LDFLAGS:INTERNAL=-lgstmpegts-1.0;-lgstbase-1.0;-lgstreamer-1.0;-lgobject-2.0;-lglib-2.0
+PC_GSTREAMER_MPEGTS_LDFLAGS_OTHER:INTERNAL=
+PC_GSTREAMER_MPEGTS_LIBDIR:INTERNAL=/usr/lib
+PC_GSTREAMER_MPEGTS_LIBRARIES:INTERNAL=gstmpegts-1.0;gstbase-1.0;gstreamer-1.0;gobject-2.0;glib-2.0
+PC_GSTREAMER_MPEGTS_LIBRARY_DIRS:INTERNAL=
 PC_GSTREAMER_MPEGTS_LIBS:INTERNAL=
 PC_GSTREAMER_MPEGTS_LIBS_L:INTERNAL=
 PC_GSTREAMER_MPEGTS_LIBS_OTHER:INTERNAL=
 PC_GSTREAMER_MPEGTS_LIBS_PATHS:INTERNAL=
-PC_GSTREAMER_MPEGTS_PREFIX:INTERNAL=
-PC_GSTREAMER_MPEGTS_STATIC_CFLAGS:INTERNAL=
+PC_GSTREAMER_MPEGTS_PREFIX:INTERNAL=/usr
+PC_GSTREAMER_MPEGTS_STATIC_CFLAGS:INTERNAL=-pthread;-I/usr/include/gstreamer-1.0;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 PC_GSTREAMER_MPEGTS_STATIC_CFLAGS_I:INTERNAL=
-PC_GSTREAMER_MPEGTS_STATIC_CFLAGS_OTHER:INTERNAL=
+PC_GSTREAMER_MPEGTS_STATIC_CFLAGS_OTHER:INTERNAL=-pthread
+PC_GSTREAMER_MPEGTS_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/gstreamer-1.0;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+PC_GSTREAMER_MPEGTS_STATIC_LDFLAGS:INTERNAL=-pthread;-lgstmpegts-1.0;-lgstbase-1.0;-lgstreamer-1.0;-lgmodule-2.0;-ldl;-lgobject-2.0;-lffi;-lglib-2.0;-lpcre
+PC_GSTREAMER_MPEGTS_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_GSTREAMER_MPEGTS_STATIC_LIBDIR:INTERNAL=
+PC_GSTREAMER_MPEGTS_STATIC_LIBRARIES:INTERNAL=gstmpegts-1.0;gstbase-1.0;gstreamer-1.0;gmodule-2.0;dl;gobject-2.0;ffi;glib-2.0;pcre
+PC_GSTREAMER_MPEGTS_STATIC_LIBRARY_DIRS:INTERNAL=
 PC_GSTREAMER_MPEGTS_STATIC_LIBS:INTERNAL=
 PC_GSTREAMER_MPEGTS_STATIC_LIBS_L:INTERNAL=
 PC_GSTREAMER_MPEGTS_STATIC_LIBS_OTHER:INTERNAL=
 PC_GSTREAMER_MPEGTS_STATIC_LIBS_PATHS:INTERNAL=
-PC_GSTREAMER_MPEGTS_VERSION:INTERNAL=
+PC_GSTREAMER_MPEGTS_VERSION:INTERNAL=1.6.0
 PC_GSTREAMER_MPEGTS_gstreamer-mpegts-1.0_INCLUDEDIR:INTERNAL=
 PC_GSTREAMER_MPEGTS_gstreamer-mpegts-1.0_LIBDIR:INTERNAL=
 PC_GSTREAMER_MPEGTS_gstreamer-mpegts-1.0_PREFIX:INTERNAL=
@@ -1060,6 +1130,7 @@ _Boost_COMPONENTS_SEARCHED:INTERNAL=
 _Boost_INCLUDE_DIR_LAST:INTERNAL=/usr/include
 //Last used Boost_USE_MULTITHREADED value.
 _Boost_USE_MULTITHREADED_LAST:INTERNAL=TRUE
+__pkg_config_checked_PC_GLIB:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_APP:INTERNAL=1
 __pkg_config_checked_PC_GSTREAMER_AUDIO:INTERNAL=1

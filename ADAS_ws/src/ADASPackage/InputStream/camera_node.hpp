@@ -35,7 +35,6 @@ public:
     // Create the camera reading loop.
     thread_ = std::thread(std::bind(&CameraNode::loop, this));
   }
-
   virtual ~CameraNode()
   {
     // Make sure to join the thread on shutdown.

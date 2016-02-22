@@ -9,6 +9,7 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
   rclcpp::executors::SingleThreadedExecutor executor;
+  rclcpp::executors::MultiThreadedExecutor mexecutor;
 
   // Connect the nodes as a pipeline: camera_node -> lanedetect_node-> streamer_node
   auto camera_node = std::make_shared<CameraNode>("image");

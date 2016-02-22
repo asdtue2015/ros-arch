@@ -61,6 +61,27 @@ mat_type2encoding(int mat_type)
   }
 }
 
+
+
+char*
+mat_type2GSTencoding(int mat_type)
+{
+  switch (mat_type) {
+    case CV_8UC1:
+      return "GRAY8";
+    case CV_8UC3:
+      return "BGR";
+    case CV_16SC1:
+      return "GRAY16_BE";
+    case CV_8UC4:
+      return "RGBA";
+    default:
+      throw std::runtime_error("Unsupported encoding type");
+  }
+}
+
+
+
 void set_now(builtin_interfaces::msg::Time & time)
 {
   std::chrono::nanoseconds now = std::chrono::high_resolution_clock::now().time_since_epoch();

@@ -16,6 +16,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED)
+find_package(GLIB COMPONENTS gio gobject gmodule gthread REQUIRED)
+#FIND_PACKAGE(glib-2.0)
 find_package(GStreamer REQUIRED)
 
 include_directories(include ${Boost_INCLUDE_DIRS} ${GSTREAMER_BASE_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS} )
@@ -23,20 +25,16 @@ link_directories(${GSTREAMER_LIBRARIES})
 
 #target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES})
 
-
-
-
-
  
  # A single program with one of each of the image pipeline demo nodes.
  
  add_executable(ADAS_Pipeline_Manager
  ADASPackage/ADAS_Pipeline_Manager.cpp)
- target_link_libraries(ADAS_Pipeline_Manager ${GSTREAMER_LIBRARIES})
  ament_target_dependencies(ADAS_Pipeline_Manager
    				"rclcpp"
    				"sensor_msgs"
     				"OpenCV")
+  target_link_libraries(ADAS_Pipeline_Manager ${GSTREAMER_LIBRARIES} ${GLIB_LIBRARIES} ${GLIB_GOBJECT_LIBRARIES} ${GLIB_GIO_LIBRARIES} ${GLIB_GMODULE_LIBRARIES} ${GLIB_GTHREAD_LIBRARIES})
      
   
  #  A stand alone node which produces images from a camera using OpenCV.
@@ -62,11 +60,11 @@ link_directories(${GSTREAMER_LIBRARIES})
   # A stand alone node which streams out the processed frames on the network
   add_executable(streamer_node
     ADASPackage/VideoServer/streamer_node.cpp)
-  target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES})
   ament_target_dependencies(streamer_node
    				 "rclcpp"
    				 "sensor_msgs"
    				 "OpenCV")
+ target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES} ${GLIB_LIBRARIES} ${GLIB_GOBJECT_LIBRARIES} ${GLIB_GIO_LIBRARIES} ${GLIB_GMODULE_LIBRARIES} ${GLIB_GTHREAD_LIBRARIES})
      
    
 
