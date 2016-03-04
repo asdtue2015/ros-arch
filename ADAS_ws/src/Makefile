@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rameez/git_local/ADAS_ws/src
+CMAKE_SOURCE_DIR = /home/rameez/gitlocal_ros/ADAS_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rameez/git_local/ADAS_ws/src
+CMAKE_BINARY_DIR = /home/rameez/gitlocal_ros/ADAS_ws/src
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,16 +79,6 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: install/strip
-.PHONY : install/strip/fast
-
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -110,9 +100,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rameez/git_local/ADAS_ws/src/CMakeFiles /home/rameez/git_local/ADAS_ws/src/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rameez/gitlocal_ros/ADAS_ws/src/CMakeFiles /home/rameez/gitlocal_ros/ADAS_ws/src/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rameez/git_local/ADAS_ws/src/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rameez/gitlocal_ros/ADAS_ws/src/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -152,6 +142,11 @@ ADAS_Pipeline_Manager/fast:
 	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/build
 .PHONY : ADAS_Pipeline_Manager/fast
 
+# Manual pre-install relink rule for target.
+ADAS_Pipeline_Manager/preinstall:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/preinstall
+.PHONY : ADAS_Pipeline_Manager/preinstall
+
 #=============================================================================
 # Target rules for targets named camera_node
 
@@ -164,6 +159,11 @@ camera_node: cmake_check_build_system
 camera_node/fast:
 	$(MAKE) -f CMakeFiles/camera_node.dir/build.make CMakeFiles/camera_node.dir/build
 .PHONY : camera_node/fast
+
+# Manual pre-install relink rule for target.
+camera_node/preinstall:
+	$(MAKE) -f CMakeFiles/camera_node.dir/build.make CMakeFiles/camera_node.dir/preinstall
+.PHONY : camera_node/preinstall
 
 #=============================================================================
 # Target rules for targets named lanedetect_node
@@ -178,6 +178,11 @@ lanedetect_node/fast:
 	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/build
 .PHONY : lanedetect_node/fast
 
+# Manual pre-install relink rule for target.
+lanedetect_node/preinstall:
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/preinstall
+.PHONY : lanedetect_node/preinstall
+
 #=============================================================================
 # Target rules for targets named streamer_node
 
@@ -190,6 +195,11 @@ streamer_node: cmake_check_build_system
 streamer_node/fast:
 	$(MAKE) -f CMakeFiles/streamer_node.dir/build.make CMakeFiles/streamer_node.dir/build
 .PHONY : streamer_node/fast
+
+# Manual pre-install relink rule for target.
+streamer_node/preinstall:
+	$(MAKE) -f CMakeFiles/streamer_node.dir/build.make CMakeFiles/streamer_node.dir/preinstall
+.PHONY : streamer_node/preinstall
 
 #=============================================================================
 # Target rules for targets named uninstall
@@ -252,29 +262,245 @@ ADASPackage/InputStream/camera_node.cpp.s:
 	$(MAKE) -f CMakeFiles/camera_node.dir/build.make CMakeFiles/camera_node.dir/ADASPackage/InputStream/camera_node.cpp.s
 .PHONY : ADASPackage/InputStream/camera_node.cpp.s
 
-ADASPackage/LDW/lanedetect_node.o: ADASPackage/LDW/lanedetect_node.cpp.o
-.PHONY : ADASPackage/LDW/lanedetect_node.o
+ADASPackage/LDW/LaneDetector/DetectLanes.o: ADASPackage/LDW/LaneDetector/DetectLanes.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.o
 
 # target to build an object file
-ADASPackage/LDW/lanedetect_node.cpp.o:
-	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/lanedetect_node.cpp.o
-.PHONY : ADASPackage/LDW/lanedetect_node.cpp.o
+ADASPackage/LDW/LaneDetector/DetectLanes.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.cpp.o
 
-ADASPackage/LDW/lanedetect_node.i: ADASPackage/LDW/lanedetect_node.cpp.i
-.PHONY : ADASPackage/LDW/lanedetect_node.i
+ADASPackage/LDW/LaneDetector/DetectLanes.i: ADASPackage/LDW/LaneDetector/DetectLanes.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.i
 
 # target to preprocess a source file
-ADASPackage/LDW/lanedetect_node.cpp.i:
-	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/lanedetect_node.cpp.i
-.PHONY : ADASPackage/LDW/lanedetect_node.cpp.i
+ADASPackage/LDW/LaneDetector/DetectLanes.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.cpp.i
 
-ADASPackage/LDW/lanedetect_node.s: ADASPackage/LDW/lanedetect_node.cpp.s
-.PHONY : ADASPackage/LDW/lanedetect_node.s
+ADASPackage/LDW/LaneDetector/DetectLanes.s: ADASPackage/LDW/LaneDetector/DetectLanes.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.s
 
 # target to generate assembly for a file
-ADASPackage/LDW/lanedetect_node.cpp.s:
-	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/lanedetect_node.cpp.s
-.PHONY : ADASPackage/LDW/lanedetect_node.cpp.s
+ADASPackage/LDW/LaneDetector/DetectLanes.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/DetectLanes.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/DetectLanes.cpp.s
+
+ADASPackage/LDW/LaneDetector/ExtractFeatures.o: ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.o
+
+ADASPackage/LDW/LaneDetector/ExtractFeatures.i: ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.i
+
+ADASPackage/LDW/LaneDetector/ExtractFeatures.s: ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/ExtractFeatures.cpp.s
+
+ADASPackage/LDW/LaneDetector/FittingCurve.o: ADASPackage/LDW/LaneDetector/FittingCurve.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/FittingCurve.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.cpp.o
+
+ADASPackage/LDW/LaneDetector/FittingCurve.i: ADASPackage/LDW/LaneDetector/FittingCurve.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/FittingCurve.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.cpp.i
+
+ADASPackage/LDW/LaneDetector/FittingCurve.s: ADASPackage/LDW/LaneDetector/FittingCurve.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/FittingCurve.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/FittingCurve.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/FittingCurve.cpp.s
+
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.o: ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.o
+
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.i: ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.i
+
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.s: ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.cpp.s
+
+ADASPackage/LDW/LaneDetector/IPMTransformation.o: ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.o
+
+ADASPackage/LDW/LaneDetector/IPMTransformation.i: ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.i
+
+ADASPackage/LDW/LaneDetector/IPMTransformation.s: ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/IPMTransformation.cpp.s
+
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.o: ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.o
+
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.i: ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.i
+
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.s: ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/LaneDetectorTools.cpp.s
+
+ADASPackage/LDW/LaneDetector/TrackLanes.o: ADASPackage/LDW/LaneDetector/TrackLanes.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.o
+
+# target to build an object file
+ADASPackage/LDW/LaneDetector/TrackLanes.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.o
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.cpp.o
+
+ADASPackage/LDW/LaneDetector/TrackLanes.i: ADASPackage/LDW/LaneDetector/TrackLanes.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.i
+
+# target to preprocess a source file
+ADASPackage/LDW/LaneDetector/TrackLanes.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.i
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.cpp.i
+
+ADASPackage/LDW/LaneDetector/TrackLanes.s: ADASPackage/LDW/LaneDetector/TrackLanes.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/LaneDetector/TrackLanes.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/LaneDetector/TrackLanes.cpp.s
+.PHONY : ADASPackage/LDW/LaneDetector/TrackLanes.cpp.s
+
+ADASPackage/LDW/Process_LaneDetectorSim.o: ADASPackage/LDW/Process_LaneDetectorSim.cpp.o
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.o
+
+# target to build an object file
+ADASPackage/LDW/Process_LaneDetectorSim.cpp.o:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.o
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.o
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.cpp.o
+
+ADASPackage/LDW/Process_LaneDetectorSim.i: ADASPackage/LDW/Process_LaneDetectorSim.cpp.i
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.i
+
+# target to preprocess a source file
+ADASPackage/LDW/Process_LaneDetectorSim.cpp.i:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.i
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.i
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.cpp.i
+
+ADASPackage/LDW/Process_LaneDetectorSim.s: ADASPackage/LDW/Process_LaneDetectorSim.cpp.s
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/Process_LaneDetectorSim.cpp.s:
+	$(MAKE) -f CMakeFiles/ADAS_Pipeline_Manager.dir/build.make CMakeFiles/ADAS_Pipeline_Manager.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.s
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/Process_LaneDetectorSim.cpp.s
+.PHONY : ADASPackage/LDW/Process_LaneDetectorSim.cpp.s
+
+ADASPackage/LDW/main_LaneDetectorSim.o: ADASPackage/LDW/main_LaneDetectorSim.cpp.o
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.o
+
+# target to build an object file
+ADASPackage/LDW/main_LaneDetectorSim.cpp.o:
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/main_LaneDetectorSim.cpp.o
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.cpp.o
+
+ADASPackage/LDW/main_LaneDetectorSim.i: ADASPackage/LDW/main_LaneDetectorSim.cpp.i
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.i
+
+# target to preprocess a source file
+ADASPackage/LDW/main_LaneDetectorSim.cpp.i:
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/main_LaneDetectorSim.cpp.i
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.cpp.i
+
+ADASPackage/LDW/main_LaneDetectorSim.s: ADASPackage/LDW/main_LaneDetectorSim.cpp.s
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.s
+
+# target to generate assembly for a file
+ADASPackage/LDW/main_LaneDetectorSim.cpp.s:
+	$(MAKE) -f CMakeFiles/lanedetect_node.dir/build.make CMakeFiles/lanedetect_node.dir/ADASPackage/LDW/main_LaneDetectorSim.cpp.s
+.PHONY : ADASPackage/LDW/main_LaneDetectorSim.cpp.s
 
 ADASPackage/VideoServer/streamer_node.o: ADASPackage/VideoServer/streamer_node.cpp.o
 .PHONY : ADASPackage/VideoServer/streamer_node.o
@@ -311,7 +537,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
-	@echo "... install/strip"
 	@echo "... lanedetect_node"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
@@ -323,9 +548,33 @@ help:
 	@echo "... ADASPackage/InputStream/camera_node.o"
 	@echo "... ADASPackage/InputStream/camera_node.i"
 	@echo "... ADASPackage/InputStream/camera_node.s"
-	@echo "... ADASPackage/LDW/lanedetect_node.o"
-	@echo "... ADASPackage/LDW/lanedetect_node.i"
-	@echo "... ADASPackage/LDW/lanedetect_node.s"
+	@echo "... ADASPackage/LDW/LaneDetector/DetectLanes.o"
+	@echo "... ADASPackage/LDW/LaneDetector/DetectLanes.i"
+	@echo "... ADASPackage/LDW/LaneDetector/DetectLanes.s"
+	@echo "... ADASPackage/LDW/LaneDetector/ExtractFeatures.o"
+	@echo "... ADASPackage/LDW/LaneDetector/ExtractFeatures.i"
+	@echo "... ADASPackage/LDW/LaneDetector/ExtractFeatures.s"
+	@echo "... ADASPackage/LDW/LaneDetector/FittingCurve.o"
+	@echo "... ADASPackage/LDW/LaneDetector/FittingCurve.i"
+	@echo "... ADASPackage/LDW/LaneDetector/FittingCurve.s"
+	@echo "... ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.o"
+	@echo "... ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.i"
+	@echo "... ADASPackage/LDW/LaneDetector/GenerateLaneIndicators.s"
+	@echo "... ADASPackage/LDW/LaneDetector/IPMTransformation.o"
+	@echo "... ADASPackage/LDW/LaneDetector/IPMTransformation.i"
+	@echo "... ADASPackage/LDW/LaneDetector/IPMTransformation.s"
+	@echo "... ADASPackage/LDW/LaneDetector/LaneDetectorTools.o"
+	@echo "... ADASPackage/LDW/LaneDetector/LaneDetectorTools.i"
+	@echo "... ADASPackage/LDW/LaneDetector/LaneDetectorTools.s"
+	@echo "... ADASPackage/LDW/LaneDetector/TrackLanes.o"
+	@echo "... ADASPackage/LDW/LaneDetector/TrackLanes.i"
+	@echo "... ADASPackage/LDW/LaneDetector/TrackLanes.s"
+	@echo "... ADASPackage/LDW/Process_LaneDetectorSim.o"
+	@echo "... ADASPackage/LDW/Process_LaneDetectorSim.i"
+	@echo "... ADASPackage/LDW/Process_LaneDetectorSim.s"
+	@echo "... ADASPackage/LDW/main_LaneDetectorSim.o"
+	@echo "... ADASPackage/LDW/main_LaneDetectorSim.i"
+	@echo "... ADASPackage/LDW/main_LaneDetectorSim.s"
 	@echo "... ADASPackage/VideoServer/streamer_node.o"
 	@echo "... ADASPackage/VideoServer/streamer_node.i"
 	@echo "... ADASPackage/VideoServer/streamer_node.s"

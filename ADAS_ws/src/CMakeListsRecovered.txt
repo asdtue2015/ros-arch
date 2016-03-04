@@ -31,7 +31,7 @@ FILE(GLOB_RECURSE SRCS_LaneDetect ADASPackage/LDW/LaneDetector/*.cpp )
  # A single program with one of each of the image pipeline demo nodes.
  
  add_executable(ADAS_Pipeline_Manager
- ADASPackage/ADAS_Pipeline_Manager.cpp ADASPackage/LDW/Process_LaneDetectorSim.cpp ${SRCS_LaneDetect})
+ ADASPackage/ADAS_Pipeline_Manager.cpp ${SRCS_LaneDetect})
  ament_target_dependencies(ADAS_Pipeline_Manager
    				"rclcpp"
    				"sensor_msgs"
@@ -52,7 +52,7 @@ FILE(GLOB_RECURSE SRCS_LaneDetect ADASPackage/LDW/LaneDetector/*.cpp )
 
   # A stand alone node which performs Lane Detection on the road images
  
-  add_executable(lanedetect_node ADASPackage/LDW/main_LaneDetectorSim.cpp  ADASPackage/LDW/Process_LaneDetectorSim.cpp ${SRCS_LaneDetect} )
+  add_executable(lanedetect_node ADASPackage/LDW/main_LaneDetectorSim.cpp   ${SRCS_LaneDetect} )
   ament_target_dependencies(lanedetect_node
    				 "rclcpp"
    				 "sensor_msgs"
@@ -77,7 +77,7 @@ FILE(GLOB_RECURSE SRCS_LaneDetect ADASPackage/LDW/LaneDetector/*.cpp )
      
 
   install(TARGETS   
-    ADAS_Pipeline_Manager
+    #ADAS_Pipeline_Manager
     camera_node
     lanedetect_node
     streamer_node

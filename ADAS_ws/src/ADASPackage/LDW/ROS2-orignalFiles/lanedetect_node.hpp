@@ -3,15 +3,16 @@
 #define IMAGE_PIPELINE__WATERMARK_NODE_HPP_
 
 #include <string>
-
-#include "opencv2/opencv.hpp"
+#include <chrono>
+#include <string>
+#include <thread>
+#include <memory>
+#include "opencv2/highgui/highgui.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
-
-
 #include "../Aux/common.hpp"
+/*Node that receives an image,performs lane detection and publishes it again. */
 
-// Node that receives an image, adds some text as a watermark, and publishes it again.
 class LaneDetectNode : public rclcpp::Node
 {
 public:
