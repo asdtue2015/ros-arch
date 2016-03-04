@@ -20,8 +20,10 @@ find_package(GLIB COMPONENTS gio gobject gmodule gthread REQUIRED)
 #FIND_PACKAGE(glib-2.0)
 find_package(GStreamer REQUIRED)
 
+
 include_directories(include ${Boost_INCLUDE_DIRS} ${GSTREAMER_BASE_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS} )
 link_directories(${GSTREAMER_LIBRARIES})
+FILE(GLOB_RECURSE SRCS_LaneDetect ADASPackage/LDW/LaneDetector/*.cpp )
 
 #target_link_libraries(streamer_node ${GSTREAMER_LIBRARIES})
 
@@ -29,7 +31,7 @@ link_directories(${GSTREAMER_LIBRARIES})
  # A single program with one of each of the image pipeline demo nodes.
  
  add_executable(ADAS_Pipeline_Manager
- ADASPackage/ADAS_Pipeline_Manager.cpp)
+ ADASPackage/ADAS_Pipeline_Manager.cpp ADASPackage/LDW/Process_LaneDetectorSim.cpp ${SRCS_LaneDetect})
  ament_target_dependencies(ADAS_Pipeline_Manager
    				"rclcpp"
    				"sensor_msgs"
@@ -49,13 +51,15 @@ link_directories(${GSTREAMER_LIBRARIES})
 
 
   # A stand alone node which performs Lane Detection on the road images
-  FILE(GLOB_RECURSE SRCS ADASPackage/LDW/LaneDetectorSim/*.cpp ADASPackage/LDW/LaneDetector/*.cpp )
-  add_executable(lanedetect_node ${SRCS} )
+ 
+  add_executable(lanedetect_node ADASPackage/LDW/main_LaneDetectorSim.cpp  ADASPackage/LDW/Process_LaneDetectorSim.cpp ${SRCS_LaneDetect} )
   ament_target_dependencies(lanedetect_node
    				 "rclcpp"
    				 "sensor_msgs"
    				 "OpenCV")
   target_link_libraries(lanedetect_node ${OpenCV_LIBS} )  
+
+
   #add_executable(lanedetect_node ADASPackage/LDW/lanedetect_node.cpp) 
   #ament_target_dependencies(lanedetect_node "rclcpp" "sensor_msgs" "OpenCV")
   
@@ -73,7 +77,7 @@ link_directories(${GSTREAMER_LIBRARIES})
      
 
   install(TARGETS   
-    #ADAS_Pipeline_Manager
+    ADAS_Pipeline_Manager
     camera_node
     lanedetect_node
     streamer_node

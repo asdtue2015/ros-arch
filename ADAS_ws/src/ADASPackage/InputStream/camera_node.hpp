@@ -3,6 +3,7 @@
 #define IMAGE_PIPELINE__CAMERA_NODE_HPP_
 
 #include <chrono>
+#include <ctime>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -13,7 +14,7 @@
 #include "../Aux/common.hpp"
 
 
-
+using namespace std::chrono;
 
 class SourceFolder
 {
@@ -21,6 +22,7 @@ class SourceFolder
 public:
 
 	std::string Source_string;
+	double fps= 20;
 	char Img_Path[256];
 	int	LANE_DETECTOR = 1;
 	int	LANE_ANALYZER = 1;
@@ -129,10 +131,7 @@ else
       }
       // Create a new unique_ptr to an Image message for storage.
       sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
-      std::stringstream ss;
-      // Put this process's id and the msg's pointer address on the image.
-      ss << "pid: " << GETPID() << ", ptr: " << msg.get();
-      draw_on_image(frame_, ss.str(), 20);
+
       // Pack the OpenCV image into the ROS image.
       set_now(msg->header.stamp);
       msg->header.frame_id = "camera_frame";
@@ -143,6 +142,7 @@ else
       msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame_.step);
       msg->data.assign(frame_.datastart, frame_.dataend);
       pub_->publish(msg);  // Publish.
+
     }
   }
 
@@ -150,23 +150,25 @@ else
   void loop_FolderSrc()
     {
 
+	  std::chrono::time_point<std::chrono::system_clock> start, end;
+
       // While running...
       while (rclcpp::ok() && !canceled_.load() && src_folder.Idx <= src_folder.EndFrame)
       {
 
+    	auto start = high_resolution_clock::now();
+
     	//double startTime = (double)cv::getTickCount();
     	sprintf(src_folder.Img_Path, src_folder.Source_string.c_str() , src_folder.Idx);
-    	//frame_ = cv::imread(src_folder.Img_Path);
-    	frame_ = cv::imread("fish.jpg");
-    	cv::imshow(node_name, frame_);
+    	frame_ = cv::imread(src_folder.Img_Path);
+    	//frame_ = cv::imread("fish.jpg");
+    	//cv::imshow(node_name, frame_);
 
         if (frame_.empty())
           continue;
 
         // Create a new unique_ptr to an Image message for storage.
         sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
-
-
 
         // Pack the OpenCV image into the ROS image.
         set_now(msg->header.stamp);
@@ -179,18 +181,34 @@ else
         msg->data.assign(frame_.datastart, frame_.dataend);
         std::cout<< msg.get()<<std::endl;
         std::cout<< msg->width<<std::endl;
+
+
+        //wait for target duration
+        auto end = high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration = end-start;
+
+
+        while (duration.count() < (1.0/src_folder.fps)*1000)
+        {
+
+        	//std::cout<<duration.count() << std::endl;
+        	end = high_resolution_clock::now();
+        	duration = end- start;
+        }
+
+
         pub_->publish(msg);  // Publish.
         src_folder.Idx++;
-    	cv::waitKey(0);
 
       }
 
     }
 
 
-
 private:
   InputMode input = InputMode::Folder;
+
+  std::chrono::high_resolution_clock Clock;
   std::string node_name;
   SourceFolder src_folder= SourceFolder();
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;

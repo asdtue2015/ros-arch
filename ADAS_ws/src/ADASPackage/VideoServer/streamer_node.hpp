@@ -224,6 +224,10 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
         }
 
 
+   cv::imshow("Streamer_local", frame_);
+ 	     cv::waitKey(1);
+
+
    	   	/* Handle bus messages */
 		GstMessage *gstmsg;
   	    bus = gst_element_get_bus (pipeline);
