@@ -10,3 +10,4 @@ extractor
 *.pdf
 CMakeCache.txt
 CMakeFiles/
+/data/
