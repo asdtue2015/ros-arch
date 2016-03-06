@@ -157,9 +157,9 @@ public:
 				   	      	          cv::putText(laneMat, text, cv::Point(0, 60), cv::FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(0, 255, 0));
 				   	      	          delete text;
 
-				   	      	           // cv::imshow("Lane System", laneMat);
-				   	      	           //cv::moveWindow("Lane System", 790, 30);
-				   	      	            //cv::waitKey(1);
+				   	      	           cv::imshow("Lane System", laneMat);
+				   	      	           cv::moveWindow("Lane System", 790, 30);
+				   	      	           cv::waitKey(1);
 
 
 				   	      	  // Annotate the image with the pid, pointer address, and the watermark text.
