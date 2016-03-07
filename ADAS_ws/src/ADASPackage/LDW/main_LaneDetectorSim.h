@@ -59,11 +59,11 @@ public:
 		PITCH_ANGLE   = pitchangle;
 	}
 
-	int LANE_DETECTOR = 1;
+    int LANE_DETECTOR = 1;
     int StartFrame = 1;
     int EndFrame = 61;
     double YAW_ANGLE = 0.0;
-	double PITCH_ANGLE = 0.1;
+    double PITCH_ANGLE = 0.1;
 };
 
 
@@ -120,6 +120,7 @@ public:
 
 				   	      	  if (Args.LANE_DETECTOR && !init)
 				   	      	      {
+	
 
 				   	      		  	  	  std::cout << "/*************************************/" << std::endl;
 				   	      				  std::cout << "xxxInput LANE_DETECTOR" << Args.LANE_DETECTOR << std::endl;
@@ -133,10 +134,12 @@ public:
 				   	      	            LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2); // KIT 1, ESIEE 2
 				   	      	            LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
 				   	      	            init=true; //poisonous
+
+					                   idx= Args.StartFrame;
 				   	      	      }
 
 
-				   	      	   if (Args.LANE_DETECTOR)
+				   	      	   if (Args.LANE_DETECTOR && idx<=Args.EndFrame)
 				   	      	     {
 
 				   	      	       	 startTime = (double)cv::getTickCount();
@@ -164,6 +167,7 @@ public:
 
 				   	      	  // Annotate the image with the pid, pointer address, and the watermark text.
 				   	      	  pub_ptr->publish(msg);    // Publish it along.
+					          idx++;
 
 				   	    }, qos);
 

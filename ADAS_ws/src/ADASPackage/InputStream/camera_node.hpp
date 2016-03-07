@@ -22,7 +22,7 @@ class SourceFolder
 public:
 
 	std::string Source_string;
-	double fps= 20;
+	double fps= 10;
 	char Img_Path[256];
 	int	LANE_DETECTOR = 1;
 	int	LANE_ANALYZER = 1;
