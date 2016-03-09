@@ -22,7 +22,7 @@ class SourceFolder
 public:
 
 	std::string Source_string;
-	double fps= 20;
+	double fps= 15;
 	char Img_Path[256];
 	int	LANE_DETECTOR = 1;
 	int	LANE_ANALYZER = 1;
@@ -179,8 +179,6 @@ else
         msg->is_bigendian = false;
         msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame_.step);
         msg->data.assign(frame_.datastart, frame_.dataend);
-        std::cout<< msg.get()<<std::endl;
-        std::cout<< msg->width<<std::endl;
 
 
         //wait for target duration

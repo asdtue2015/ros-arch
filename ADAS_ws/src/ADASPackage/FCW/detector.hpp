@@ -9,12 +9,12 @@
 #include <stdexcept>
 #include "opencv2/gpu/gpu.hpp"
 #include "opencv2/highgui/highgui.hpp"
-//#include "rclcpp/rclcpp.hpp"
-//#include "sensor_msgs/msg/image.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/image.hpp"
 #include <sys/types.h> // for "stat" function
 #include <sys/stat.h>
 #include <unistd.h>
-
+#include "../Aux/common.hpp"
 #include <sys/types.h> // for "opendir" function
 #include <dirent.h>
 
@@ -65,10 +65,11 @@ public:
 };
 
 
-class App
+class App:public rclcpp::Node
 {
+  
 public:
-    App(const Args& s);
+    App(const std::string & input, const std::string & output, Args a);
     void run();
     void before_run();
     void handleKey(char key);
@@ -105,6 +106,9 @@ private:
 
     int64 work_begin;
     double work_fps;
+    
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
 
 //Internal
     int width_run, height_run;
@@ -123,6 +127,8 @@ private:
 
 static void printHelp()
 {
+  
+  
     cout << "Histogram of Oriented Gradients descriptor and detector sample.\n"
          << "\nUsage: hog_gpu\n"
          << "  (<image>|--video <vide>|--camera <camera_id>) # frames source\n"
@@ -197,10 +203,7 @@ String detector_out(Rect* r){
 
 
 Args::Args()
-{
-    src_is_video = false;
-    src_is_camera = false;
-	src_is_directory = false;
+{    
     camera_id = 0;
     file_gen = false;
     write_video = false;
@@ -208,14 +211,13 @@ Args::Args()
 
     make_gray = false;
 
-
     resize_src = false;
     width = 640;
     height = 480;
 
     scale = 1.12; // "optimal" for KITTI dataset
     nlevels = 13;
-    gr_threshold = 1;
+    gr_threshold = 0;
     hit_threshold = 1.4;
     hit_threshold_auto = true;
 
@@ -223,11 +225,14 @@ Args::Args()
     win_stride_width = 8;
     win_stride_height = 8;
     gamma_corr = true;
+    
 }
 
 
 Args Args::read(int argc, char** argv)
 {
+  
+  
     Args args;
     for (int i = 1; i < argc; i++)
     {// desired input settings
@@ -282,11 +287,24 @@ Args Args::read(int argc, char** argv)
 		Displaces the mathematic decision surface of the SVM model.
 */
 
-App::App(const Args& s)
-{
-    cv::gpu::printShortCudaDeviceInfo(cv::gpu::getDevice());
+App::App (const std::string & input, const std::string & output, Args a):Node("detector_node", true)
 
-    args = s;
+{
+
+  cout<<"input= "<<input<<endl;
+  cout<<"output= "<<output<<endl;
+
+
+
+  cv::gpu::printShortCudaDeviceInfo(cv::gpu::getDevice());
+    
+  auto qos = rmw_qos_profile_sensor_data;
+   
+   // Create a publisher on the output topic.
+			  pub_ = this->create_publisher<sensor_msgs::msg::Image>(output, qos);
+			  std::weak_ptr<std::remove_pointer<decltype(pub_.get())>::type> captured_pub = pub_;
+
+    args = a;
     cout << "\nControls:\n"
          << "\tESC - exit\n"
          << "\tm - change mode GPU <-> CPU\n"
@@ -308,6 +326,7 @@ App::App(const Args& s)
     hit_threshold = args.hit_threshold;
 
     gamma_corr = args.gamma_corr;
+    
 /*
     if (args.win_width != 64 && args.win_width != 48)
         args.win_width = 64;*/
@@ -322,16 +341,155 @@ App::App(const Args& s)
     cout << "Hit threshold: " << hit_threshold << endl;
     cout << "Gamma correction: " << gamma_corr << endl;
     cout << endl;
+    
+    before_run();
+    
+
+   // Create a subscription on the input topic.
+    
+    sub_ = this->create_subscription<sensor_msgs::msg::Image>(input, [this, captured_pub](sensor_msgs::msg::Image::UniquePtr msg)
+	
+    {
+      
+       auto pub_ptr = captured_pub.lock();     
+       if (!pub_ptr) {return;}
+
+       std::string write_txt;
+
+	// Create a cv::Mat from the image message (without copying). 
+	cv::Mat frame( msg->width, msg->height,encoding2mat_type(msg->encoding), msg->data.data());
+	Mat img_aux, img, img_to_show;
+        gpu::GpuMat gpu_img;
+
+        
+	workBegin(); // start timer of the whole work
+
+        // Change format of the image
+            
+	if (make_gray) cvtColor(frame, img_aux, CV_BGR2GRAY); // if itś set to move into grey scale then do so
+        else if (use_gpu) cvtColor(frame, img_aux, CV_BGR2BGRA);
+        else frame.copyTo(img_aux);
+
+       // Resize image
+       if (args.resize_src) resize(img_aux, img, Size(args.width, args.height));
+       else img = img_aux;
+       img_to_show = img;
+
+       gpu_hog.nlevels = nlevels;
+       cpu_hog.nlevels = nlevels;
+
+       
+       vector<Rect> found;
+
+       // Perform HOG classification
+       hogWorkBegin();// start the timer of the hog classification
+        
+       if (use_gpu)
+         {
+           gpu_img.upload(img);
+           gpu_hog.detectMultiScale(gpu_img, found, hit_threshold, win_stride,
+           Size(0, 0), scale, gr_threshold);
+                // if use_gpu is true so itś required to use gpu then use the detect multi scale function in the gpu_hog
+         }
+       else cpu_hog.detectMultiScale(img, found, hit_threshold, win_stride,
+       
+
+       Size(0, 0), scale, gr_threshold);
+                
+       // if use_gpu is false then itś required to use the cpu then we use the detectmultiscale function of the cpu_hog
+       /* based on the produced output alternation when the mode is toggled between cpu and gpu although the thresholds didn change so it could
+          be infered from the alternation in the output that detectmulti scale works differently depending on whether its from cpu_hog or gpu_hog */
+            
+       hogWorkEnd();// end the timer of the hog classification
+
+       // Draw positive classified windows  here we draw the green rectangular boxes of the found objects
+
+
+       write_txt = "";
+       
+       for (size_t i = 0; i < found.size(); i++)
+            
+           {
+
+
+                Rect r = found[i]; // what should be saved as suggest in a .yml file by the detector.cpp file
+
+                write_txt +=detector_out(&r);
+
+                rectangle(img_to_show, r.tl(), r.br(), CV_RGB(0, 255, 0), 3);
+
+            }
+
+    
+      if(args.file_gen)
+	    
+	  {
+	      write_file(args.src, write_txt);
+	  }
+
+	  
+      if (use_gpu) // here the text is added (fps) to the display both in case of cpu or gpu
+          putText(img_to_show, "Mode: GPU", Point(5, 25), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
+      else
+          putText(img_to_show, "Mode: CPU", Point(5, 25), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
+          putText(img_to_show, "FPS (HOG only): " + hogWorkFps(), Point(5, 65), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
+          putText(img_to_show, "FPS (total): " + workFps(), Point(5, 105), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
+            
+      
+      imshow("opencv_gpu_hog", img_to_show);
+	    
+	    //publish image  
+            
+	    
+            workEnd(); // end the timer of the whole work
+
+            if (args.write_video)
+            {
+                if (!video_writer.isOpened())
+                {
+                    video_writer.open(args.dst_video, CV_FOURCC('x','v','i','d'), args.dst_video_fps,
+                                      img_to_show.size(), true);
+                    if (!video_writer.isOpened())
+                        throw std::runtime_error("can't create video writer");
+                }
+
+                if (make_gray) cvtColor(img_to_show, img, CV_GRAY2BGR);
+                else cvtColor(img_to_show, img, CV_BGRA2BGR);
+
+                video_writer << img;
+            }
+            
+            
+            
+           // produce an output video from the results
+            handleKey((char)waitKey(3));
+	    
+	    
+	    
+	    
+	    set_now(msg->header.stamp);
+	    msg->header.frame_id = "camera_frame";
+	    msg->height = img_to_show.cols;
+	    msg->width = img_to_show.rows;
+	    msg->encoding = mat_type2encoding(img_to_show.type());
+	    msg->is_bigendian = false;
+	    msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(img_to_show.step);
+	    msg->data.assign(img_to_show.datastart, img_to_show.dataend); 
+	    pub_ptr->publish(msg);    // Publish it along.
+
+				   	    }, qos); 
+    
+    
+    //run();    
 }
 
 void App::before_run()
 {
 // Shah modification replaces below to load detecor in yml file
     // replace commented code below
-    FileStorage fs("../../data/carDetector56x48_front_ov_100h.yml", FileStorage::READ);
+    FileStorage fs("../inputdata/FCWdata/carDetector56x48_front_ov_100h.yml", FileStorage::READ);
 
 
-    
     fs["width"] >> width_run;
     fs["height"] >> height_run;
     fs["detector"] >> detector;
@@ -366,8 +524,16 @@ void App::before_run()
     gpu_hog = cv::gpu::HOGDescriptor(win_size, Size(16, 16), Size(8, 8), Size(8, 8), 9,
                                    cv::gpu::HOGDescriptor::DEFAULT_WIN_SIGMA, 0.2, gamma_corr,
                                    cv::gpu::HOGDescriptor::DEFAULT_NLEVELS);
+
+
+
+
     cpu_hog = cv::HOGDescriptor(win_size, Size(16, 16), Size(8, 8), Size(8, 8), 9, 1, -1,
                               HOGDescriptor::L2Hys, 0.2, gamma_corr, cv::HOGDescriptor::DEFAULT_NLEVELS);
+
+
+
+
 
     // Shah modification replaces code below
     gpu_hog.setSVMDetector(detector);// set the detector with the detector values from the .yml file
@@ -377,13 +543,12 @@ void App::before_run()
 //     gpu_hog.setSVMDetector(detector);
 //     cpu_hog.setSVMDetector(detector);
 
-
     // find out if the input is a directory
     struct stat path_stat;
     
     
 
-    if( (!args.src_is_video) && (!args.src_is_camera) ) // first, make sure we are not dealing with a video or camera
+    /*if( (!args.src_is_video) && (!args.src_is_camera) ) // first, make sure we are not dealing with a video or camera
     {
         stat(args.src.c_str(), &path_stat);
         if( S_ISDIR(path_stat.st_mode) == 1 )
@@ -402,160 +567,17 @@ void App::before_run()
             if(directory_name.back() != '/') // check for missing slash at the end of directory path
                 directory_name.append("/");
         }
-    }
+    }*/
 }
+
 void App::run()
 {
     
     
     while (running)
     {
-        VideoCapture vc;
-        Mat frame;
-
-	string write_txt;
-        if (args.src_is_video)// if the input is a video
-        {
-            vc.open(args.src.c_str());
-            if (!vc.isOpened())
-                throw runtime_error(string("can't open video file: " + args.src));
-            vc >> frame;
-        }
-        else if (args.src_is_camera)// if the input is from a camera
-        {
-            vc.open(args.camera_id);
-            if (!vc.isOpened())
-            {
-                stringstream msg;
-                msg << "can't open camera: " << args.camera_id;
-                throw runtime_error(msg.str());
-            }
-            vc >> frame;
-        }
-        else // in case the input is just an image
-        {
-			if(args.src_is_directory == true)
-			{
-				// prepare next image of directory
-				running = false; // by default, we assume there will be no more image available
-
-				while ( (ep = readdir (dp)) ) // iterate until we find the next image
-			    {
-					if((point = strrchr(ep->d_name,'.')) != NULL )
-					{
-		       			if(strcmp(point,".png") == 0 || strcmp(point,".jpg") == 0) // check extension for image type
-						{
-							// we found an image
-							running = true; // we can run something during the next loop
-							args.src = directory_name + string(ep->d_name); // create full path to image file
-							cout << "Processing: " << args.src << "\n";
-							break; // stop searching some next image
-						}
-					}
-				}
-			}
-
-            frame = imread(args.src);
-            if (frame.empty())
-                throw runtime_error(string("can't open image file: " + args.src));
-        }
-
-        Mat img_aux, img, img_to_show;
-        gpu::GpuMat gpu_img;
-        // Iterate over all frames
-        while (running && !frame.empty())// as long as running is set to be true and we still have frames to run then
-        {
-            workBegin(); // start timer of the whole work
-
-            // Change format of the image
-            if (make_gray) cvtColor(frame, img_aux, CV_BGR2GRAY); // if itś set to move into grey scale then do so
-            else if (use_gpu) cvtColor(frame, img_aux, CV_BGR2BGRA);
-            else frame.copyTo(img_aux);
-
-            // Resize image
-            if (args.resize_src) resize(img_aux, img, Size(args.width, args.height));
-            else img = img_aux;
-            img_to_show = img;
-
-            gpu_hog.nlevels = nlevels;
-            cpu_hog.nlevels = nlevels;
-
-            vector<Rect> found;
-
-            // Perform HOG classification
-            hogWorkBegin();// start the timer of the hog classification
-            if (use_gpu)
-            {
-                gpu_img.upload(img);
-                gpu_hog.detectMultiScale(gpu_img, found, hit_threshold, win_stride,
-                                         Size(0, 0), scale, gr_threshold);
-                // if use_gpu is true so itś required to use gpu then use the detect multi scale function in the gpu_hog
-            }
-            else cpu_hog.detectMultiScale(img, found, hit_threshold, win_stride,
-                                          Size(0, 0), scale, gr_threshold);
-                // if use_gpu is false then itś required to use the cpu then we use the detectmultiscale function of the cpu_hog
-                /* based on the produced output alternation when the mode is toggled between cpu and gpu although the thresholds didn change so it could
-                    be infered from the alternation in the output that detectmulti scale works differently depending on whether its from cpu_hog or gpu_hog */
-            hogWorkEnd();// end the timer of the hog classification
-
-            // Draw positive classified windows  here we draw the green rectangular boxes of the found objects
-
-
-            write_txt = "";
-            for (size_t i = 0; i < found.size(); i++)
-            {
-
-
-                Rect r = found[i]; // what should be saved as suggest in a .yml file by the detector.cpp file
-
-                write_txt +=detector_out(&r);
-
-                rectangle(img_to_show, r.tl(), r.br(), CV_RGB(0, 255, 0), 3);
-
-            }
-
-			if(args.file_gen)
-			{
-				write_file(args.src, write_txt);
-
-				if (!args.src_is_directory && !args.src_is_video && !args.src_is_camera) // if processing a single file
-					running=false; // then don't loop on the current image
-
-				break; // don't display anything (much faster!)
-			}
-
-            if (use_gpu) // here the text is added (fps) to the display both in case of cpu or gpu
-                putText(img_to_show, "Mode: GPU", Point(5, 25), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
-            else
-                putText(img_to_show, "Mode: CPU", Point(5, 25), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
-            putText(img_to_show, "FPS (HOG only): " + hogWorkFps(), Point(5, 65), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
-            putText(img_to_show, "FPS (total): " + workFps(), Point(5, 105), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
-            imshow("opencv_gpu_hog", img_to_show);
-
-            if (args.src_is_video || args.src_is_camera) vc >> frame;// whether the source is video or from camera put update the frame to the capured value
-            workEnd(); // end the timer of the whole work
-
-            if (args.write_video)
-            {
-                if (!video_writer.isOpened())
-                {
-                    video_writer.open(args.dst_video, CV_FOURCC('x','v','i','d'), args.dst_video_fps,
-                                      img_to_show.size(), true);
-                    if (!video_writer.isOpened())
-                        throw std::runtime_error("can't create video writer");
-                }
-
-                if (make_gray) cvtColor(img_to_show, img, CV_GRAY2BGR);
-                else cvtColor(img_to_show, img, CV_BGRA2BGR);
-
-                video_writer << img;
-            }
-                // produce an output video from the results
-            handleKey((char)waitKey(3));
-
-			if (args.src_is_directory) break; // if processing a folder, get the next image instead of looping
-
-        }
+        
+	    
     }
 }
 
@@ -648,7 +670,6 @@ inline string App::hogWorkFps() const
     ss << hog_work_fps;
     return ss.str();
 }
-
 
 inline void App::workBegin() { work_begin = getTickCount(); }
 

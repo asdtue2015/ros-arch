@@ -83,7 +83,7 @@ public:
 
 	  {
 			this->Args=args;
-			 auto qos = rmw_qos_profile_sensor_data;
+			auto qos = rmw_qos_profile_sensor_data;
 
 		      execTime          = 0;  // Execute Time for Each Frame
 			  lastLateralOffset = 0;
@@ -102,11 +102,11 @@ public:
 			  InitlaneFeatures(laneFeatures);
 
 
-		      // Create a publisher on the input topic.
+		      // Create a publisher on the output topic.
 			  pub_ = this->create_publisher<sensor_msgs::msg::Image>(output, qos);
 			  std::weak_ptr<std::remove_pointer<decltype(pub_.get())>::type> captured_pub = pub_;
 
-			  // Create a subscription on the output topic.
+			  // Create a subscription on the input topic.
 			  sub_ = this->create_subscription<sensor_msgs::msg::Image>(input, [this, captured_pub](sensor_msgs::msg::Image::UniquePtr msg)
 					  	  {
 				   	      	  auto pub_ptr = captured_pub.lock();
@@ -162,7 +162,7 @@ public:
 				   	      	           cv::waitKey(1);
 
 
-				   	      	  // Annotate the image with the pid, pointer address, and the watermark text.
+
 				   	      	  pub_ptr->publish(msg);    // Publish it along.
 
 				   	    }, qos);

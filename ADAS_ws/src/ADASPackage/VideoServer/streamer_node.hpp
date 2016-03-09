@@ -124,7 +124,7 @@ private:
     //static GMainLoop *loop;
     bool VidSource_initialised=false;
     GImage* Gframe= new GImage();
-    GstElement *pipeline, *source, *appsrc, *encoder, *decoder, *payload, *conv, *myudpsink, *videosink;
+    GstElement *pipeline, *source, *appsrc, *encoder, *decoder, *payload, *conv, *myudpsink, *videosink, *queue;
     GstBus *bus;
 
 
@@ -164,7 +164,7 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
 	    source    = gst_element_factory_make ("videotestsrc", "source");
 
 	    encoder = gst_element_factory_make("avenc_mpeg4", "Mpeg4_encoder");
-	    decoder = gst_element_factory_make("avdec_mpeg4", "Mpeg4_decoder");
+	    //decoder = gst_element_factory_make("avdec_mpeg4", "Mpeg4_decoder");
 	    //encoder = gst_element_factory_make("jpegenc", "encoder");
 	    //decoder = gst_element_factory_make("jpegdec", "decoder");
 
@@ -172,6 +172,10 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
 	    payload = gst_element_factory_make("rtpmp4vpay", "payload");
 
 	    conv      = gst_element_factory_make ("videoconvert", "conv");
+	    
+	    queue = gst_element_factory_make ("queue", "queue");
+	    
+	    
 	    videosink = gst_element_factory_make ("autovideosink", "videosink");
 	    myudpsink   =  gst_element_factory_make ("udpsink", "myudpsink");
 
@@ -200,7 +204,7 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
 
 
 	    /*SetUp UDP-sink*/
-	    	    g_object_set(G_OBJECT(myudpsink), "host", "131.155.222.12", NULL);
+	    	    g_object_set(G_OBJECT(myudpsink), "host", "131.155.223.27", NULL);
 	    	    g_object_set(G_OBJECT(myudpsink), "port", 5000, NULL);
 
 	   /*Connect the pipeline elements */
