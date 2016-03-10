@@ -1,0 +1,7 @@
+*.o
+*~
+.project
+.cproject
+
+/RemoteSystemsTempFiles/
+/.metadata/
