@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
   auto camera_node = std::make_shared<CameraNode>("image");
   auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image", args_LDW);
   auto detector_node = std::make_shared<App>("image", "detector_image", args_FCW);
-  auto streamer_node =   std::make_shared<Streamer>("detector_image");
+  auto streamer_node =   std::make_shared<Streamer>("lanedetect_image");
 
   executor.add_node(camera_node);
   executor.add_node(lanedetect_node);

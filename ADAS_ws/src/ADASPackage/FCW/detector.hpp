@@ -436,7 +436,9 @@ App::App (const std::string & input, const std::string & output, Args a):Node("d
           putText(img_to_show, "FPS (total): " + workFps(), Point(5, 105), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
             
       
-      imshow("opencv_gpu_hog", img_to_show);
+      
+         
+      //imshow("opencv_gpu_hog", img_to_show);
 	    
 	    //publish image  
             
@@ -462,7 +464,7 @@ App::App (const std::string & input, const std::string & output, Args a):Node("d
             
             
            // produce an output video from the results
-            handleKey((char)waitKey(3));
+            //handleKey((char)waitKey(3));
 	    
 	    
 	    
@@ -475,6 +477,11 @@ App::App (const std::string & input, const std::string & output, Args a):Node("d
 	    msg->is_bigendian = false;
 	    msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(img_to_show.step);
 	    msg->data.assign(img_to_show.datastart, img_to_show.dataend); 
+	    
+	    //cv::Mat cvMat( msg->width, msg->height,encoding2mat_type(msg->encoding), msg->data.data());
+	    //cv::imshow("Lane System", cvMat);
+	    //cv::waitKey(1);
+	    
 	    pub_ptr->publish(msg);    // Publish it along.
 
 				   	    }, qos); 

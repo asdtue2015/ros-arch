@@ -44,6 +44,7 @@ typedef struct {
 
 	gboolean resize, have_data;
 	guint in_framerate, in_width, in_height, out_width, out_height;
+	gchar* format = "BGR";
 	GstBuffer* buffer;
 	gint rotation;
 
@@ -129,11 +130,13 @@ static void cb_need_Data(GstElement *appsrc, guint unused_size, gpointer user_da
 
 	if (resize)
 	{
+	  std::cout<<app.format<<endl;
 		g_warning("Streamer resizing to %dx%d", app.in_width, app.in_height);
+		
+		
 		g_object_set(G_OBJECT(app.source), "caps",
-
 		gst_caps_new_simple("video/x-raw",
-			"format", G_TYPE_STRING, "BGR",
+			"format", G_TYPE_STRING, app.format,
 			"width", G_TYPE_INT, app.in_width,
 			"height", G_TYPE_INT, app.in_height,
 			"framerate", GST_TYPE_FRACTION, app.in_framerate, 1,
@@ -213,14 +216,18 @@ static void  cb_need_data (GstAppSrc *appsrc,guint usize, gpointer Gimage)
 }
 */
 
-void streamer_feed_sync(guint w, guint h, gssize size, guint8* frame)
+void streamer_feed_sync(guint w, guint h, gssize size, gchar* format, guint8* frame)
 {
+ 
+  
 
-	if (w != app.in_width || h != app.in_height)
+	if (w != app.in_width || h != app.in_height || app.format != format)
 	{
 		app.resize = TRUE;
 		app.in_width = w;
 		app.in_height = h;
+		app.format = format;
+		
 	}
 
 	if (app.resize)
@@ -233,13 +240,13 @@ void streamer_feed_sync(guint w, guint h, gssize size, guint8* frame)
 	gst_buffer_fill(app.buffer, 0, frame, size);
 }
 
-void streamer_feed(guint w, guint h, gssize size, guint8* frame) {
+void streamer_feed(guint w, guint h, gssize size, gchar * format, guint8* frame) {
 
 
 
 	g_mutex_lock(&app.mutex);
 
-	streamer_feed_sync(w, h, size, frame);
+	streamer_feed_sync(w, h, size, format, frame);
 	app.have_data = TRUE;
 
 	g_mutex_unlock(&app.mutex);
@@ -317,14 +324,13 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height) {
 	app.conv      = gst_element_factory_make ("videoconvert", "conv");
 
 
-	//app.encoder = gst_element_factory_make("avenc_mpeg4", "Mpeg4-encoder");
-	//app.payload = gst_element_factory_make("rtpmp4vpay", "payload");
+	app.encoder = gst_element_factory_make("avenc_mpeg4", "Mpeg4-encoder");
+	app.payload = gst_element_factory_make("rtpmp4vpay", "payload");
 
 
-	app.encoder = gst_element_factory_make("jpegenc", "jpeg-encoder");
-	app.payload = gst_element_factory_make("rtpjpegpay", "payload");
+	//app.encoder = gst_element_factory_make("jpegenc", "jpeg-encoder");
+	//app.payload = gst_element_factory_make("rtpjpegpay", "payload");
 
-	app.decoder = gst_element_factory_make("jpegdec", "jpeg-decoder");
 	app.sink   =  gst_element_factory_make ("udpsink", "udp-sink");
 	//app.sink   =  gst_element_factory_make ("autovideosink", "video-sink");
 
@@ -343,8 +349,9 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height) {
 
 
 
-	 g_object_set(G_OBJECT(app.sink), "host", "131.155.222.152", NULL);
+	 g_object_set(G_OBJECT(app.sink), "host", "131.155.222.8", NULL);
 	 g_object_set(G_OBJECT(app.sink), "port", 5000, NULL);
+
 
 
 
@@ -353,11 +360,13 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height) {
 	g_object_set(G_OBJECT(app.payload),"config-interval", 60, NULL);
 
 
+	/* Encoder settings in case of MPEG4 */
+	 g_object_set(G_OBJECT(app.encoder), "bitrate", 4000000, NULL);
 
 
 	g_object_set(G_OBJECT(app.source), "caps",
 		gst_caps_new_simple	("video/x-raw",
-							 "format", G_TYPE_STRING, "BGR",
+							 "format", G_TYPE_STRING, app.format,
 							 "width", G_TYPE_INT, out_width,
 							 "height", G_TYPE_INT, out_height,
 							 "framerate", GST_TYPE_FRACTION, in_framerate, 1, NULL), NULL);
@@ -469,6 +478,8 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
   	  	  	  	 : Node(node_name, true)
 {
 
+  
+  
 	int w=1024, h=600, fps = 0;
 
 	auto qos = rmw_qos_profile_sensor_data;
@@ -478,9 +489,10 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
 	g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_default_handler, NULL);
 	XInitThreads();
 	streamer_init();
+	
+	
     if (streamer_run(fps, w / 2, h/ 2))
  {
-
 	/*Initialise Gstreamer */
 
 	//rameez	  gst_init (NULL, NULL);
@@ -489,14 +501,40 @@ public: explicit Streamer( const std::string & input, const std::string & node_n
 		    sub_ = this->create_subscription<sensor_msgs::msg::Image>(input, [node_name, this, app](const sensor_msgs::msg::Image::SharedPtr msg)
 
 		{
+		  
+		  
+		  
+
+		  
+		  
 		  //Create a cv::Mat from the image message (without copying).
 		   cv::Mat frame_(msg->width, msg->height,encoding2mat_type(msg->encoding), msg->data.data());
 		   this->frame_= frame_;
+		    
+		   
+		   std::string encoding = mat_type2GSTencoding(frame_.type());
 
-		   streamer_feed(frame_.cols, frame_.rows,frame_.step[0] * frame_.rows,frame_.data);
+
+		    gchar * format = new char[encoding.size() + 1];
+		  		  std::copy(encoding.begin(), encoding.end(), format);
+		  		  format[encoding.size()] = '\0'; // don't forget the terminating 0
+
+		  //cv::imshow("Lane System", frame_);
+		  // cv::waitKey(1);
+		   
+		   
+		cout<<format<<std::endl;
+									      
+									      
+									      
+		  streamer_feed(frame_.cols, frame_.rows,frame_.step[0] * frame_.rows, "BGR",   frame_.data);
+		  
+		  delete[] format;
+		  
 		 }, qos);
 
  }
+ 
    // g_usleep(1000*1000*10);
    // streamer_stop();
 }

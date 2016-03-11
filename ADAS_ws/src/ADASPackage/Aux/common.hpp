@@ -63,7 +63,7 @@ mat_type2encoding(int mat_type)
 
 
 
-char*
+std::string
 mat_type2GSTencoding(int mat_type)
 {
   switch (mat_type) {
