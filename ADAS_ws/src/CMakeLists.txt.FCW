@@ -33,12 +33,15 @@ ament_target_dependencies(ADAS_Pipeline_Manager
   
   
   
+  
  #  A stand alone node which produces images from a camera using OpenCV.
+ 
    add_executable(camera_node ADASPackage/InputStream/camera_node.cpp)
    ament_target_dependencies(camera_node
     				"rclcpp"
     				"sensor_msgs"
     				"OpenCV")
+
 
 
   # A stand alone node which performs CAR Detection on the road images
